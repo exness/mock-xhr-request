@@ -1,0 +1,11 @@
+node_modules
+.idea/
+.vscode/
+*.tgz
+package-lock.json
+esm
+lib
+package/
+.DS_Store
+yarn-error.log
+lazy.d.ts
