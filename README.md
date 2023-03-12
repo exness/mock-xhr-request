@@ -369,42 +369,12 @@ To get a list of all prepared in app mocks, including mocks from external compon
 
 ```typescript
 // Usage
-MockXHR.getRegisteredMocks()
+MockXHR.getRegisteredMocks();
 // Passing search term
-MockXHR.getRegisteredMocks('information')
+MockXHR.getRegisteredMocks('information');
 
 // API
 MockXHR.getRegisteredMocks(url?: string): Record<string, object>
-```
-
-```typescript
-
-// to set optional search params
-MockXHR.get('company_info/:secret:?search').success()
-// to set required search params
-MockXHR.get('company_info/:secret:!search').success()
-// to change or add some parameters for prepared mock (all params are optional)
-MockXHR.applyReady(21, {
-  data: data => ({...data, balance: 123}),
-  times: 1,
-  delay: 2000,
-  status: 401,
-  headers: {requestId: 456}
-})
-// to change or add some parameters for prepared with name mock (all params are optional)
-MockXHR.applyReady('401GetAccounts', {
-  data: data => ({...data, balance: 123}),
-  times: 1,
-  delay: 2000,
-  status: 401,
-  headers: {requestId: 456}
-})
-// returns set in console mocks
-MockXHR.getSetMocks()
-// returns registered in App auto-mocks
-MockXHR.getRegisteredMocks()
-// returns registered in App auto-mocks which equals or includes the string "/account" in their URL
-MockXHR.getRegisteredMocks('/account') 
 ```
 
 ## Notes
@@ -419,8 +389,44 @@ Second parameter of wrapAxiosAdapter function is base url, all mocked url will b
 
 ## Examples
 
+### Mocking request for user info
+
 ```typescript
-wrapAxiosAdapter(axiosInstance, 'http://localhost:8080/v3/async') // for dev mode
-MockXHR.get('/api/account/:id/information').success()
+import axios from 'axios'
+import { wrapAxiosAdapter, registerMock } from 'mock-xhr-request'
+
+const isProd = process.env.NODE_ENV !== 'production';
+const baseApiUrl = isProd ? 'http://localhost:8080/api/v2' : '/api/v2';
+const axiosInstance = axios.create({ withCredentials: true });
+
+wrapAxiosAdapter(axiosInstance, baseApiUrl);
+
+const mockData = { userName: 'johnDoe123', age: 30 }
+registerMock('user/:id/info', 'get', 200, mockData);
+const getUserInfo = (userId: number): Promise<UserInfo> => {
+  const url = `${baseApiUrl}/user/${userId}/info`;
+  return axiosInstance.get<UserInfo>(url);
+}
+
+// somewhere in code the request happens
+api.getUserInfo(accountId).then(userInfo => renderUser(userInfo));
+
+// in browser console
+MockXHR.enable(); // call it once, no need to do it after page load/refresh
+MockXHR.get('/api/v2/user/:id/info').success(); // will be applied prepared mock
+// Or set mock for specified user id
+MockXHR.get('/api/v2/user/345/info').success({
+  userName: 'Some user name',
+  age: 99
+});
+// Or return error 401 and add delay to check how site react to long requests
+MockXHR.get('/api/v2/user/345/info')
+  .withDelay(2000)
+  .withStatus(401, {
+    reason: 'unauthorized',
+    internal_code: 898232
+  });
 ```
-Mocked url will be **http://localhost:8080//api/account/:id/information** where **:id** is any word
+
+Mocked url will be **http://localhost:8080/api/v2/user/:id/info**, in dev mode, and for prod version is **/api/v2/user/:id/info**.
+Mock system will return mocked results until disabling or unloading.
