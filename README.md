@@ -420,7 +420,7 @@ Second parameter of wrapAxiosAdapter function is base url, all mocked url will b
 ## Examples
 
 ```typescript
-wrapAxiosAdapter(axiosInstance, 'http://localhost:8080/v3/async')
-MockXHR.get('company_info/:secret').success()
+wrapAxiosAdapter(axiosInstance, 'http://localhost:8080/v3/async') // for dev mode
+MockXHR.get('/api/account/:id/information').success()
 ```
-Mocked url will be **http://localhost:8080/v3/async/company_info/:secret** where **:secret** is any word
+Mocked url will be **http://localhost:8080//api/account/:id/information** where **:id** is any word
