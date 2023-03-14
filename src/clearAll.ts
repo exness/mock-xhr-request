@@ -14,6 +14,7 @@ export const clearAll = (clearEverything = false): void => {
 
   keysToClear.forEach(key => localStorage.removeItem(key));
 
+
   if (clearEverything) {
     disable();
   }
