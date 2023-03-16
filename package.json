@@ -46,7 +46,8 @@
     "prettier": "prettier --write 'src/**/*.{ts,js}'",
     "eslint": "./node_modules/.bin/eslint --max-warnings 0 src",
     "type-check": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install"
   },
   "keywords": [
     "mock",

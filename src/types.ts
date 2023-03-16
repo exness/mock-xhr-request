@@ -48,3 +48,8 @@ export type CodeStatus = number | 'success' | 'error';
 export type Times = number | 'always';
 
 export type ResponseHeaders = Record<string, string | number | boolean>
+
+export type WrapAdapterOptions = {
+  baseUrl?: string
+  autoDisable?: boolean | number
+}

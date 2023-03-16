@@ -43,10 +43,10 @@ Second argument "baseUrl" allow to register prepared mocks without the need to b
 import { wrapAxiosAdapter} from 'mock-xhr-request'
 
 //Usage
-wrapAxiosAdapter(axiosInstance, '/api/v2')
+wrapAxiosAdapter(axiosInstance, { baseUrl: '/api/v2' })
 
 // API
-wrapAxiosAdapter(axiosInstance: AxiosInstance, baseUrl: string = location.origin): void
+wrapAxiosAdapter(axiosInstance: AxiosInstance, options?: { baseUrl?: string = '/', autoDisable?: boolean = true }): void
 ```
 
 ### wrapChildAxiosAdapter
@@ -57,10 +57,10 @@ That will allow to set and share mocks across the application root and widget's 
 import { wrapChildAxiosAdapter} from 'mock-xhr-request'
 
 //Usage
-wrapChildAxiosAdapter(axiosInstance, 'userInfoWidget', '/api/v2')
+wrapChildAxiosAdapter(axiosInstance, 'userInfoWidget', { baseUrl: '/api/v2' } )
 
 // API
-wrapChildAxiosAdapter(axiosInstance: AxiosInstance, widgetName: string, baseUrl: string = location.origin): void
+wrapChildAxiosAdapter(axiosInstance: AxiosInstance, widgetName: string, options?: { baseUrl?: string = '/', autoDisable?: boolean = true }): void
 ```
 
 ### registerMock
@@ -141,12 +141,57 @@ registerMock(
 ).withHeaders(headers: Record<string, string | number | boolean>)
 ```
 
+All registerMock function arguments also could be passed through function.
+
+```typescript
+// Usage
+registerMock(() => ({
+    urlOrRegex: '/api/account/:id/information',
+    method: 'get',
+    status: 'success',
+    data: mockedUserInfo,
+    name: 'userInfoSuccess',
+    headers: { 'X-RequestId' : 12345 } 
+  })
+)
+
+// API
+registerMock({
+    urlOrRegex: UrlOrRegex,
+    method: HttpMethod,
+    status: CodeStatus,
+    data: ResponseData,
+    name? : string,
+    headers? : ResponseHeaders
+  }
+)
+```
+
+If you have data, which is loaded in lazy mode, you can pass function, that returns promise with mock parameters.
+
+```typescript
+// Usage
+registerMock(() => import('./userInfo/mock').then(m => m.userInfoMock)) // mock file contains variable userInfoMock with mock JSON value
+
+// API
+registerMock(() => Promise<{
+    urlOrRegex: UrlOrRegex,
+    method: HttpMethod,
+    status: CodeStatus,
+    data: ResponseData,
+    name?: string,
+    headers?: ResponseHeaders
+  }>
+)
+```
+
 ## MockXHR API
 This section describes the api of MockXHR global variable, that appears as global object(property of window) after wrapping the axios instance. 
 
 ### MockXHR.enable
-To enable mock system, call this function. In simple mode(not lazy) you can set/delete mocks without enabling mock system. 
-To see the result, refresh the web page. All set mocks are applied only after refresh.
+To enable mock system, call this function. In simple mode(not lazy) you can set/delete mocks without enabling mock system. To see the result, refresh the web page. 
+All set mocks are applied only after refresh. If you want to use lazy load, switch to import from ``mock-xhr-request/lazy``. Call this function to load mock system library in browser context.
+After the first load the js bundle should be cached. You can start setting mocks without page refresh. Mock system should be enabled already at this time.
 
 ```typescript
 // usage
@@ -158,39 +203,16 @@ MockXHR.enable()
 
 ### MockXHR.disable
 To disable mock system call this function. Disabling will not clear the set mocks. Don't forget to refresh the web page.
-
-```typescript
-// usage
-MockXHR.disable()
-
-// API
-MockXHR.disable()
-```
-
-### MockXHR.load
-If you want to use lazy load, switch to import from ``mock-xhr-request/lazy``. Call load function to load mock system library in browser context.
-After the first load the js bundle should be cached. You can start setting mocks without page refresh.
-
-```typescript
-// usage
-MockXHR.load()
-
-// API
-MockXHR.load()
-```
-
-### MockXHR.unload
-If you want to use lazy load, switch to import from ``mock-xhr-request/lazy``. Call unload function to unload mock system library from browser context.
+If you want to use lazy load, switch to import from ``mock-xhr-request/lazy``. Call this function to unload mock system library from browser context.
 On the next web page refresh, mock system will stop loading its main js bundle, but that doesn't mean, that it will be unloaded from browser cache.
 
 ```typescript
 // usage
-MockXHR.unload()
+MockXHR.disable()
 
 // API
-MockXHR.unload()
+MockXHR.disable()
 ```
-
 
 ### MockXHR.get/post/patch/put/delete
 To mock request in browser console call one of the methods (get/post/patch/put/delete) and pass url path. Then call one of the continuation methods:
