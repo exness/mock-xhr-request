@@ -2,7 +2,6 @@ import { PARAM_KEY } from '../constants';
 import { registerMock } from '../registerMock';
 import { __resetGlobalMocks, getAllRegisteredMocks } from '../registeredMocks'
 import { setBaseUrl } from '../baseUrl'
-import { CodeStatus, HttpMethod } from '../types'
 
 describe('registerMock', () => {
   const globalMocks = getAllRegisteredMocks()
@@ -56,7 +55,14 @@ describe('registerMock', () => {
   })
 
   it('should add mock with name and headers to globalMocks array if mock is function', () => {
-    registerMock(() => ({ urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {}, name: 'abcd', headers: { requestId: '123123' } }));
+    registerMock(() => ({
+      urlOrRegex: 'abc/qwe',
+      method: 'get',
+      status: 'success',
+      data: {},
+      name: 'abcd',
+      headers: { requestId: '123123' },
+    }));
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -67,17 +73,19 @@ describe('registerMock', () => {
       originalUrl: 'abc/qwe',
       name: 'abcd',
       data: {},
-      headers: { requestId: '123123' }
+      headers: { requestId: '123123' },
     });
   })
 
   it('should add mock to globalMocks array if mock is function which returns promise', async () => {
-    await registerMock(() => Promise.resolve({
+    registerMock(() => Promise.resolve({
       urlOrRegex: 'abc/qwe',
       method: 'get',
       status: 'success',
       data: {},
     } as const));
+
+    await Promise.resolve()
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -91,13 +99,15 @@ describe('registerMock', () => {
   })
 
   it('should add mock with headers to globalMocks array if mock is function which returns promise', async () => {
-    await registerMock(() => Promise.resolve({
+    registerMock(() => Promise.resolve({
       urlOrRegex: 'abc/qwe',
       method: 'get',
       status: 'success',
       data: {},
-      headers: { requestId: '123123' }
+      headers: { requestId: '123123' },
     } as const));
+
+    await Promise.resolve()
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -112,13 +122,15 @@ describe('registerMock', () => {
   })
 
   it('should add mock with name to globalMocks array if mock is function which returns promise', async () => {
-    await registerMock(() => Promise.resolve({
+    registerMock(() => Promise.resolve({
       urlOrRegex: 'abc/qwe',
       method: 'get',
       status: 'success',
       data: {},
-      name: 'abcd'
+      name: 'abcd',
     } as const));
+
+    await Promise.resolve()
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({

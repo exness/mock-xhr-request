@@ -53,3 +53,15 @@ export type WrapAdapterOptions = {
   baseUrl?: string
   autoDisable?: boolean | number
 }
+
+export type RegisterMockPayload = {
+  urlOrRegex: UrlOrRegex,
+  method: HttpMethod,
+  status: CodeStatus,
+  data: ResponseData,
+  name?: string,
+  headers?: ResponseHeaders
+}
+export type RegisterMockArgs = [UrlOrRegex, HttpMethod, CodeStatus, ResponseData]
+export type RegisterFunctionArgs = [() => Promise<RegisterMockPayload> | RegisterMockPayload]
+

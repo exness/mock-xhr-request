@@ -1,6 +1,5 @@
 import { normalizeUrl } from '../normilizeUrl'
 import { OPTIONAL_SEARCH_KEY, PARAM_KEY, REQUIRED_SEARCH_KEY } from '../constants'
-import { setBaseUrl } from '../baseUrl'
 
 describe('normalizeUrl', () => {
   it('should produce absolute url', () => {

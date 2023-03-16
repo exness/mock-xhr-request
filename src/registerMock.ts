@@ -1,6 +1,15 @@
-import {CodeStatus, HttpMethod, RegisteredMock, ResponseData, ResponseHeaders, UrlOrRegex} from './types';
+import {
+  CodeStatus,
+  HttpMethod,
+  RegisteredMock, RegisterFunctionArgs, RegisterMockArgs,
+  RegisterMockPayload,
+  ResponseData,
+  ResponseHeaders,
+  UrlOrRegex,
+} from './types';
 import {normalizeUrl} from './normilizeUrl';
 import {addRegisteredMock, updateRegisteredMock} from './registeredMocks';
+import { areArgsFromFunction } from './lazyUtils'
 
 export type WithNameBuilder = {
   withName: (mockName: string) => void;
@@ -23,30 +32,18 @@ const applyParameters = ({method, headers, name, data, status, urlOrRegex}: Regi
   }
 }
 
-type RegisterMockPayload = {
-  urlOrRegex: UrlOrRegex,
-  method: HttpMethod,
-  status: CodeStatus,
-  data: ResponseData,
-  name?: string,
-  headers?: ResponseHeaders
-}
-type RegisterMockArgs = [UrlOrRegex, HttpMethod, CodeStatus, ResponseData]
-type RegisterFunctionArgs = [() => Promise<RegisterMockPayload> | RegisterMockPayload]
-
-function registerMock(func: () => RegisterMockPayload): void;
-function registerMock(func: () => Promise<RegisterMockPayload>): Promise<void>;
+function registerMock(func: () => Promise<RegisterMockPayload> | RegisterMockPayload): void;
 function registerMock(urlOrRegex: UrlOrRegex, method: HttpMethod, status: CodeStatus, data: ResponseData): WithHelpersBuilder;
-function registerMock(...args: RegisterMockArgs | RegisterFunctionArgs): void |  Promise<void> | WithHelpersBuilder {
-  if (typeof args[0] === 'function') {
+function registerMock(...args: RegisterMockArgs | RegisterFunctionArgs): void | WithHelpersBuilder {
+  if (areArgsFromFunction(args)) {
     const resultMock = args[0]()
     if (resultMock instanceof Promise) {
-      return resultMock.then(r => applyParameters(r))
+      resultMock.then(r => applyParameters(r))
     } else {
       applyParameters(resultMock)
     }
   } else {
-    const [urlOrRegex, method, status, data] = args as RegisterMockArgs
+    const [urlOrRegex, method, status, data] = args
     return registerStaticMock(urlOrRegex, method, status, data)
   }
 }
