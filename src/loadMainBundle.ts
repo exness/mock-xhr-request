@@ -33,7 +33,7 @@ let hasEnablingHappened = false;
 // when main bundle will be loaded the adapter will be changed on mocked one before calling continuation of loadBundlePromise promise
 const replaceOriginalAdapter = (axiosInstance: AxiosInstance): AxiosAdapter | undefined => {
   let originalAdapter: AxiosAdapter | undefined;
-  if (isEnabled() && !hasEnablingHappened && storageHaveSomeMocks()) {
+  if (!hasEnablingHappened && isEnabled() && storageHaveSomeMocks()) {
     originalAdapter = axiosInstance.defaults.adapter as AxiosAdapter;
     axiosInstance.defaults.adapter = config => {
       return new Promise((res, rej) => {
@@ -58,6 +58,10 @@ function lazyRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): voi
   const registerMockCall: RegisterCall = {args, enhanceCalls: []};
   registerMockCalls.push(registerMockCall);
 
+  if (areArgsFromFunction(args)) {
+    return;
+  }
+
   const withName = (mockName: string) => {
     registerMockCall.enhanceCalls.push((r: WithNameBuilder) => {
       r.withName(mockName);
@@ -71,12 +75,10 @@ function lazyRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): voi
     };
   };
 
-  if (!areArgsFromFunction(args)) {
-    return {
-      withName,
-      withHeaders,
-    };
-  }
+  return {
+    withName,
+    withHeaders,
+  };
 }
 
 export const lazyWrapAxiosAdapter: typeof wrapAxiosAdapter = (...args) => {

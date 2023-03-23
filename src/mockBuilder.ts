@@ -42,7 +42,7 @@ const dataBuilder =
     }
 
     if (!resultData || !resultStatusCode) {
-      throw new Error('Data for mock was not found');
+      throw new Error('Data or status code for mock was not found');
     }
 
     saveMock({

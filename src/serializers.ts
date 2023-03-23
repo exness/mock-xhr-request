@@ -43,10 +43,12 @@ export const applySnapshot = async (value: string | true): Promise<void> => {
       keyValuePairs = await Promise.resolve(JSON.parse(decodeURIComponent(value)));
     }
 
-    for (const {key, value} of keyValuePairs) {
+    for (const {key} of keyValuePairs) {
       if (!isKeyFromMockSystem(key)) {
         throw new Error(`Keys except ${MOCK_PREFIX}, ${DELAY_MOCK_KEY} and ${ENABLE_MOCK_SYSTEM_KEY} are unacceptable`);
       }
+    }
+    for (const {key, value} of keyValuePairs) {
       localStorage.setItem(key, value);
     }
   } catch (e) {
@@ -58,7 +60,7 @@ export const applySnapshot = async (value: string | true): Promise<void> => {
 const copyText = async (text: string) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  document.querySelector('div').focus();
+  document.querySelector('body').focus();
   try {
     await navigator.clipboard.writeText(text);
   } catch (e) {
@@ -69,7 +71,7 @@ const copyText = async (text: string) => {
 const readText = async (): Promise<string | undefined> => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  document.querySelector('div').focus();
+  document.querySelector('body').focus();
   try {
     return await navigator.clipboard.readText();
   } catch (e) {

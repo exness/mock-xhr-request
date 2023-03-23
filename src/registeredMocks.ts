@@ -88,10 +88,10 @@ export const setGlobalMocksToWindow = (): void => {
     let allMocks = window.__MOCK_XHR__MOCKS__;
     if (!allMocks) {
       window.__MOCK_XHR__MOCKS__ = {};
-      allMocks = {};
+      allMocks = window.__MOCK_XHR__MOCKS__;
     }
     const widgetName = getWidgetName();
-    if (widgetName) {
+    if (widgetName && allMocks[widgetName] === undefined) {
       allMocks[widgetName] = registeredMocks;
     }
   } catch (e) {
