@@ -3,7 +3,7 @@ import {getCodeByStatus} from './registerMock';
 import {ALWAYS_TIME} from './constants';
 import {CodeStatus, HttpMethod, Times, ResponseData, Options, UrlOrRegex, ResponseHeaders} from './types';
 import {saveMock} from './utils';
-import { getAllRegisteredMocks } from './registeredMocks'
+import {getAllRegisteredMocks} from './registeredMocks';
 
 type DataBuilderProps = {
   method: HttpMethod;
@@ -69,8 +69,8 @@ type StatusBuilder = {
 const methodBuilder =
   (method: HttpMethod, options: Options = {}) =>
   (url: UrlOrRegex, times: Times = ALWAYS_TIME): StatusBuilder => {
-    if (!(url instanceof RegExp) && (!url.startsWith('http') && !url.startsWith('/'))) {
-      throw new Error('Url should start with http/https or /')
+    if (!(url instanceof RegExp) && !url.startsWith('http') && !url.startsWith('/')) {
+      throw new Error('Url should start with http/https or /');
     }
 
     const urlOrRegex: string | RegExp = url instanceof RegExp ? url : normalizeUrl(url);

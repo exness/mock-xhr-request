@@ -1,8 +1,8 @@
-import MockAdapter, { RequestHandler } from './axios-mock-adapter/types';
+import MockAdapter, {RequestHandler} from './axios-mock-adapter/types';
 import {getDelayResponseTime} from './delayResponse';
 import {getMocksFromStorage} from './getMocksFromStorage';
-import { ALWAYS_TIME, OPTIONAL_SEARCH_KEY, PARAM_KEY, REQUIRED_SEARCH_KEY } from './constants';
-import { makeDelayPromise } from './utils';
+import {ALWAYS_TIME, OPTIONAL_SEARCH_KEY, PARAM_KEY, REQUIRED_SEARCH_KEY} from './constants';
+import {makeDelayPromise} from './utils';
 
 const getFullUrlToMock = (baseUrl: string, url: string): string => {
   if (url.startsWith(baseUrl)) {
@@ -11,7 +11,7 @@ const getFullUrlToMock = (baseUrl: string, url: string): string => {
   if (!url.startsWith('/')) {
     return baseUrl + (baseUrl.endsWith('/') ? '' : '/') + url;
   }
-  const { origin } = new URL(baseUrl);
+  const {origin} = new URL(baseUrl);
 
   return `${origin}${url}`;
 };
@@ -41,7 +41,7 @@ export const registerAllMocks = (adapter: MockAdapter, baseUrl: string): void =>
   const storedMocks = getMocksFromStorage();
   const globalDelayResponseTime = getDelayResponseTime();
 
-  for (const { method, times, urlOrRegex, status, data, options, headers } of storedMocks) {
+  for (const {method, times, urlOrRegex, status, data, options, headers} of storedMocks) {
     let requestHandler: RequestHandler;
     const finalUrlOrRegex = urlOrRegex instanceof RegExp ? urlOrRegex : getRegexPattern(baseUrl, urlOrRegex);
 
@@ -66,7 +66,7 @@ export const registerAllMocks = (adapter: MockAdapter, baseUrl: string): void =>
     const replyFunction = () => {
       const result = [status, data];
       if (headers) {
-        result.push(headers)
+        result.push(headers);
       }
       const delayMs = options.delay || globalDelayResponseTime;
       if (delayMs) {

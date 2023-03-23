@@ -1,7 +1,7 @@
 import {normalizeUrl} from './normilizeUrl';
 import {MOCK_PREFIX} from './constants';
 import {UrlOrRegex} from './types';
-import { getLocalStorageKeyValue, getMockPairsFromLocalStorage } from './utils';
+import {getLocalStorageKeyValue, getMockPairsFromLocalStorage} from './utils';
 
 const allowedMethods = ['get', 'post', 'patch', 'delete', 'put'];
 
@@ -25,8 +25,8 @@ const removeNMock = (nMock: number) => {
 };
 
 const isUrlNumber = (url: UrlOrRegex | number): url is number => {
-  return Number.isInteger(url)
-}
+  return Number.isInteger(url);
+};
 
 export const clearMock = (url: UrlOrRegex | number, method?: string): void => {
   if (isUrlNumber(url)) {
@@ -42,8 +42,8 @@ export const clearMock = (url: UrlOrRegex | number, method?: string): void => {
 
   const keysToClear: string[] = [];
 
-  for (const { lsKey, url, method }  of getMockPairsFromLocalStorage()) {
-    if(url !== mockKey) continue
+  for (const {lsKey, url, method} of getMockPairsFromLocalStorage()) {
+    if (url !== mockKey) continue;
     if (!actualMethod) {
       keysToClear.push(lsKey);
     } else if (method === actualMethod) {

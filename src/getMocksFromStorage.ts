@@ -1,6 +1,6 @@
-import { ALWAYS_TIME } from './constants';
+import {ALWAYS_TIME} from './constants';
 import {HttpMethod, PreparedMock, StoredData} from './types';
-import { getMockPairsFromLocalStorage } from './utils'
+import {getMockPairsFromLocalStorage} from './utils';
 
 export const getMocksFromStorage = (): PreparedMock[] => {
   const preparedMocks: PreparedMock[] = [];
@@ -18,7 +18,7 @@ export const getMocksFromStorage = (): PreparedMock[] => {
       options,
       originalUrl: isRegex ? new RegExp(originalUrl) : originalUrl,
       originalStatus,
-      headers
+      headers,
     });
   }
 

@@ -1,5 +1,5 @@
-import { CodeStatus, HttpMethod, Options, ResponseData, ResponseHeaders, StoredData, Times, UrlOrRegex } from './types'
-import { MOCK_PREFIX, ALWAYS_TIME } from './constants'
+import {CodeStatus, HttpMethod, Options, ResponseData, ResponseHeaders, StoredData, Times, UrlOrRegex} from './types';
+import {MOCK_PREFIX, ALWAYS_TIME} from './constants';
 
 export const makeDelayPromise = <T>(delayMs: number, result: T): Promise<T> => {
   return new Promise(res => {
@@ -22,7 +22,7 @@ export function* getLocalStorageKeyValue(): Generator<[string, string]> {
     const key = localStorage.key(i);
     if (!key) continue;
     const value = localStorage.getItem(key);
-    if(!value) continue;
+    if (!value) continue;
     yield [key, value];
   }
 }
@@ -44,7 +44,18 @@ type SavedMock = {
 export const stringifyMockData = (mockMethod: HttpMethod, times: Times, url: string | RegExp): string =>
   `${MOCK_PREFIX}(${mockMethod})[${times}]${url}`;
 
-export const saveMock = ({method, status, url, isRegex, times, options, data, originalUrl, originalStatus, headers}: SavedMock): void => {
+export const saveMock = ({
+  method,
+  status,
+  url,
+  isRegex,
+  times,
+  options,
+  data,
+  originalUrl,
+  originalStatus,
+  headers,
+}: SavedMock): void => {
   const storedData: StoredData = {
     data,
     status,
@@ -52,23 +63,23 @@ export const saveMock = ({method, status, url, isRegex, times, options, data, or
     isRegex,
     originalUrl: originalUrl.toString(),
     originalStatus,
-    headers
+    headers,
   };
   localStorage.setItem(stringifyMockData(method, times, url), JSON.stringify(storedData));
 };
 
 type ParsedMock = {
-  lsKey: string,
-  method: string,
-  times: string,
-  url: string,
-  value: string
-}
+  lsKey: string;
+  method: string;
+  times: string;
+  url: string;
+  value: string;
+};
 
-const keyRegex = new RegExp(`${MOCK_PREFIX}\\((\\w+)\\)\\[(${ALWAYS_TIME}|\\d+)\\](.+)`)
+const keyRegex = new RegExp(`${MOCK_PREFIX}\\((\\w+)\\)\\[(${ALWAYS_TIME}|\\d+)\\](.+)`);
 
 export function* getMockPairsFromLocalStorage(): Generator<ParsedMock> {
-  for(const [lsKey, value] of getLocalStorageKeyValue()) {
+  for (const [lsKey, value] of getLocalStorageKeyValue()) {
     if (!lsKey.startsWith(MOCK_PREFIX)) {
       continue;
     }
@@ -83,8 +94,7 @@ export function* getMockPairsFromLocalStorage(): Generator<ParsedMock> {
       method,
       times,
       url,
-      value
-    }
+      value,
+    };
   }
 }
-

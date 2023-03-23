@@ -1,12 +1,7 @@
-import utils from './utils'
+import utils from './utils';
 
 function transformRequest(data) {
-  if (
-    utils.isArrayBuffer(data) ||
-    utils.isBuffer(data) ||
-    utils.isStream(data) ||
-    utils.isBlob(data)
-  ) {
+  if (utils.isArrayBuffer(data) || utils.isBuffer(data) || utils.isStream(data) || utils.isBlob(data)) {
     return data;
   }
 
@@ -31,17 +26,14 @@ function makeResponse(result, config) {
   };
 }
 
-function passThroughRequest (mockAdapter, resolve, reject, config) {
-  return mockAdapter.originalRequestFunc(config).then(resolve, reject)
+function passThroughRequest(mockAdapter, resolve, reject, config) {
+  return mockAdapter.originalRequestFunc(config).then(resolve, reject);
 }
 
 function handleRequest(mockAdapter, resolve, reject, config) {
-  var url = config.url || "";
+  var url = config.url || '';
   // TODO we're not hitting this `if` in any of the tests, investigate
-  if (
-    config.baseURL &&
-    url.substr(0, config.baseURL.length) === config.baseURL
-  ) {
+  if (config.baseURL && url.substr(0, config.baseURL.length) === config.baseURL) {
     url = url.slice(config.baseURL.length);
   }
 
@@ -53,10 +45,10 @@ function handleRequest(mockAdapter, resolve, reject, config) {
     url,
     config.data,
     config.params,
-    (config.headers && config.headers.constructor.name === 'AxiosHeaders')
+    config.headers && config.headers.constructor.name === 'AxiosHeaders'
       ? Object.assign({}, config.headers)
       : config.headers,
-    config.baseURL,
+    config.baseURL
   );
 
   if (handler) {
@@ -67,23 +59,13 @@ function handleRequest(mockAdapter, resolve, reject, config) {
     if (handler.length === 2) {
       // passThrough handler
       passThroughRequest(mockAdapter, resolve, reject, config);
-    } else if (typeof handler[3] !== "function") {
-      utils.settle(
-        resolve,
-        reject,
-        makeResponse(handler.slice(3), config),
-        mockAdapter.delayResponse,
-      );
+    } else if (typeof handler[3] !== 'function') {
+      utils.settle(resolve, reject, makeResponse(handler.slice(3), config), mockAdapter.delayResponse);
     } else {
       var result = handler[3](config);
       // TODO throw a sane exception when return value is incorrect
-      if (typeof result.then !== "function") {
-        utils.settle(
-          resolve,
-          reject,
-          makeResponse(result, config),
-          mockAdapter.delayResponse,
-        );
+      if (typeof result.then !== 'function') {
+        utils.settle(resolve, reject, makeResponse(result, config), mockAdapter.delayResponse);
       } else {
         result.then(
           function (result) {
@@ -91,19 +73,11 @@ function handleRequest(mockAdapter, resolve, reject, config) {
               utils.settle(
                 resolve,
                 reject,
-                makeResponse(
-                  [result.status, result.data, result.headers],
-                  result.config,
-                ),
-                0,
+                makeResponse([result.status, result.data, result.headers], result.config),
+                0
               );
             } else {
-              utils.settle(
-                resolve,
-                reject,
-                makeResponse(result, config),
-                mockAdapter.delayResponse,
-              );
+              utils.settle(resolve, reject, makeResponse(result, config), mockAdapter.delayResponse);
             }
           },
           function (error) {
@@ -114,17 +88,17 @@ function handleRequest(mockAdapter, resolve, reject, config) {
             } else {
               reject(error);
             }
-          },
+          }
         );
       }
     }
   } else {
     // handler not found
     switch (mockAdapter.onNoMatch) {
-      case "passthrough":
+      case 'passthrough':
         passThroughRequest(mockAdapter, resolve, reject, config);
         break;
-      case "throwException":
+      case 'throwException':
         throw utils.createCouldNotFindMockError(config);
       default:
         utils.settle(
@@ -134,10 +108,10 @@ function handleRequest(mockAdapter, resolve, reject, config) {
             status: 404,
             config,
           },
-          mockAdapter.delayResponse,
+          mockAdapter.delayResponse
         );
     }
   }
 }
 
-export { handleRequest }
+export {handleRequest};

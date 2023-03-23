@@ -1,5 +1,5 @@
-import { enable, isEnabled } from './enable';
-import { lazyRegisterMock, lazyWrapChildAxiosAdapter, lazyWrapAxiosAdapter, loadMainBundle } from './loadMainBundle';
+import {enable, isEnabled} from './enable';
+import {lazyRegisterMock, lazyWrapChildAxiosAdapter, lazyWrapAxiosAdapter, loadMainBundle} from './loadMainBundle';
 
 export type LazyMockXHR = {
   enable: typeof enable;
@@ -11,8 +11,8 @@ const lazyMockXHR: LazyMockXHR = {
     try {
       await loadMainBundle();
     } catch (e) {
-      console.error('Bundle with mock system was not loaded')
-      throw e
+      console.error('Bundle with mock system was not loaded');
+      throw e;
     }
   },
 };
@@ -20,18 +20,13 @@ const lazyMockXHR: LazyMockXHR = {
 window.MockXHR = lazyMockXHR;
 
 if (isEnabled()) {
-  loadMainBundle().catch(e => console.error('Bundle with mock system was not loaded automatically', e))
+  loadMainBundle().catch(e => console.error('Bundle with mock system was not loaded automatically', e));
 }
 
 // need to reassign imported functions to break tree shaking, otherwise code in file will not be executed
-const registerMock = lazyRegisterMock
-const wrapAxiosAdapter = lazyWrapAxiosAdapter
-const wrapChildAxiosAdapter = lazyWrapChildAxiosAdapter
-const MockXHR = lazyMockXHR
+const registerMock = lazyRegisterMock;
+const wrapAxiosAdapter = lazyWrapAxiosAdapter;
+const wrapChildAxiosAdapter = lazyWrapChildAxiosAdapter;
+const MockXHR = lazyMockXHR;
 
-export {
-  registerMock,
-  wrapAxiosAdapter,
-  wrapChildAxiosAdapter,
-  MockXHR,
-};
+export {registerMock, wrapAxiosAdapter, wrapChildAxiosAdapter, MockXHR};

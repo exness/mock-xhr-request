@@ -1,7 +1,7 @@
-let widgetName: string
+let widgetName: string;
 
 export const setWidgetName = (name: string): void => {
-  widgetName = name
-}
+  widgetName = name;
+};
 
-export const getWidgetName = (): string => widgetName
+export const getWidgetName = (): string => widgetName;

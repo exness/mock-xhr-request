@@ -1,22 +1,22 @@
-import { AxiosInstance } from 'axios';
-import { Mock, MockType } from './mockBuilder';
-import { registerMock } from './registerMock';
-import { clearMock } from './clearMock';
-import { clearAll } from './clearAll';
-import { registerAllMocks } from './registerAllMocks';
-import { clearDelayResponseTime, setDelayResponseTime } from './delayResponse';
-import { applySnapshot, snapshot } from './serializers';
-import { getSetMocks, getRegisteredMocks } from './printing';
-import { enable, disable, isEnabled } from './enable';
+import {AxiosInstance} from 'axios';
+import {Mock, MockType} from './mockBuilder';
+import {registerMock} from './registerMock';
+import {clearMock} from './clearMock';
+import {clearAll} from './clearAll';
+import {registerAllMocks} from './registerAllMocks';
+import {clearDelayResponseTime, setDelayResponseTime} from './delayResponse';
+import {applySnapshot, snapshot} from './serializers';
+import {getSetMocks, getRegisteredMocks} from './printing';
+import {enable, disable, isEnabled} from './enable';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { MockAdapter } from './axios-mock-adapter/MockAdapter';
-import { applyReady } from './applyReady';
-import { setBaseUrl } from './baseUrl';
-import { setWidgetName } from './widgetName';
-import { setGlobalMocksToWindow } from './registeredMocks';
-import { tryToAutoDisable } from './autoDisable'
-import { WrapAdapterOptions } from './types'
+import {MockAdapter} from './axios-mock-adapter/MockAdapter';
+import {applyReady} from './applyReady';
+import {setBaseUrl} from './baseUrl';
+import {setWidgetName} from './widgetName';
+import {setGlobalMocksToWindow} from './registeredMocks';
+import {tryToAutoDisable} from './autoDisable';
+import {WrapAdapterOptions} from './types';
 
 export type MockXHRType = MockType & {
   clearAll: typeof clearAll;
@@ -47,18 +47,19 @@ const MockXHR: MockXHRType = {
   applyReady,
 };
 
-const enhanceOptions = ({ autoDisable = true, baseUrl = '/' }: WrapAdapterOptions): Required<WrapAdapterOptions> => ({
-  autoDisable, baseUrl,
-})
+const enhanceOptions = ({autoDisable = true, baseUrl = '/'}: WrapAdapterOptions): Required<WrapAdapterOptions> => ({
+  autoDisable,
+  baseUrl,
+});
 
 const wrapAxiosAdapter = (axiosInstance: AxiosInstance, options: WrapAdapterOptions = {}): void => {
-  const { autoDisable, baseUrl } = enhanceOptions(options)
+  const {autoDisable, baseUrl} = enhanceOptions(options);
 
-  if(autoDisable) {
-    tryToAutoDisable()
+  if (autoDisable) {
+    tryToAutoDisable();
   }
   if (isEnabled()) {
-    const adapter = new MockAdapter(axiosInstance, { onNoMatch: 'passthrough' });
+    const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
     setBaseUrl(baseUrl);
     setGlobalMocksToWindow();
     registerAllMocks(adapter, baseUrl);
@@ -70,12 +71,12 @@ const wrapAxiosAdapter = (axiosInstance: AxiosInstance, options: WrapAdapterOpti
 const wrapChildAxiosAdapter = (
   axiosInstance: AxiosInstance,
   widgetName: string,
-  options: WrapAdapterOptions = {},
+  options: WrapAdapterOptions = {}
 ): void => {
-  const { baseUrl } = enhanceOptions(options)
+  const {baseUrl} = enhanceOptions(options);
 
   if (isEnabled()) {
-    const adapter = new MockAdapter(axiosInstance, { onNoMatch: 'passthrough' });
+    const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
     setBaseUrl(baseUrl);
     setWidgetName(widgetName);
     setGlobalMocksToWindow();
@@ -83,4 +84,4 @@ const wrapChildAxiosAdapter = (
   }
 };
 
-export { wrapAxiosAdapter, wrapChildAxiosAdapter, registerMock, MockXHR };
+export {wrapAxiosAdapter, wrapChildAxiosAdapter, registerMock, MockXHR};

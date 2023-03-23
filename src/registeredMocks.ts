@@ -46,9 +46,9 @@ const mergeWithBaseUrl = (urlOrRegexp: string | RegExp): string | RegExp => {
     return urlOrRegexp;
   }
 
-  if(baseUrl === '') {
-    showBaseUrlMissedErrorOnce()
-    return `/${urlOrRegexp}`
+  if (baseUrl === '') {
+    showBaseUrlMissedErrorOnce();
+    return `/${urlOrRegexp}`;
   }
 
   return `${baseUrl}${urlOrRegexp}`;

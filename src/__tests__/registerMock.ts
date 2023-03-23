@@ -1,14 +1,14 @@
-import { PARAM_KEY } from '../constants';
-import { registerMock } from '../registerMock';
-import { __resetGlobalMocks, getAllRegisteredMocks } from '../registeredMocks'
-import { setBaseUrl } from '../baseUrl'
+import {PARAM_KEY} from '../constants';
+import {registerMock} from '../registerMock';
+import {__resetGlobalMocks, getAllRegisteredMocks} from '../registeredMocks';
+import {setBaseUrl} from '../baseUrl';
 
 describe('registerMock', () => {
-  const globalMocks = getAllRegisteredMocks()
+  const globalMocks = getAllRegisteredMocks();
 
   beforeEach(() => {
-    __resetGlobalMocks()
-    setBaseUrl(undefined)
+    __resetGlobalMocks();
+    setBaseUrl(undefined);
   });
 
   it('should add mock to globalMocks array', () => {
@@ -26,7 +26,7 @@ describe('registerMock', () => {
   });
 
   it('should add mock to globalMocks array if mock is function', () => {
-    registerMock(() => ({ urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {} }));
+    registerMock(() => ({urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {}}));
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -37,10 +37,10 @@ describe('registerMock', () => {
       originalUrl: 'abc/qwe',
       data: {},
     });
-  })
+  });
 
   it('should add mock with name to globalMocks array if mock is function', () => {
-    registerMock(() => ({ urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {}, name: 'abcd' }));
+    registerMock(() => ({urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {}, name: 'abcd'}));
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -52,7 +52,7 @@ describe('registerMock', () => {
       name: 'abcd',
       data: {},
     });
-  })
+  });
 
   it('should add mock with name and headers to globalMocks array if mock is function', () => {
     registerMock(() => ({
@@ -61,7 +61,7 @@ describe('registerMock', () => {
       status: 'success',
       data: {},
       name: 'abcd',
-      headers: { requestId: '123123' },
+      headers: {requestId: '123123'},
     }));
 
     expect(globalMocks).toHaveLength(1);
@@ -73,19 +73,21 @@ describe('registerMock', () => {
       originalUrl: 'abc/qwe',
       name: 'abcd',
       data: {},
-      headers: { requestId: '123123' },
+      headers: {requestId: '123123'},
     });
-  })
+  });
 
   it('should add mock to globalMocks array if mock is function which returns promise', async () => {
-    registerMock(() => Promise.resolve({
-      urlOrRegex: 'abc/qwe',
-      method: 'get',
-      status: 'success',
-      data: {},
-    } as const));
+    registerMock(() =>
+      Promise.resolve({
+        urlOrRegex: 'abc/qwe',
+        method: 'get',
+        status: 'success',
+        data: {},
+      } as const)
+    );
 
-    await Promise.resolve()
+    await Promise.resolve();
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -96,18 +98,20 @@ describe('registerMock', () => {
       originalUrl: 'abc/qwe',
       data: {},
     });
-  })
+  });
 
   it('should add mock with headers to globalMocks array if mock is function which returns promise', async () => {
-    registerMock(() => Promise.resolve({
-      urlOrRegex: 'abc/qwe',
-      method: 'get',
-      status: 'success',
-      data: {},
-      headers: { requestId: '123123' },
-    } as const));
+    registerMock(() =>
+      Promise.resolve({
+        urlOrRegex: 'abc/qwe',
+        method: 'get',
+        status: 'success',
+        data: {},
+        headers: {requestId: '123123'},
+      } as const)
+    );
 
-    await Promise.resolve()
+    await Promise.resolve();
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -116,21 +120,23 @@ describe('registerMock', () => {
       originalStatus: 'success',
       url: 'abc/qwe',
       originalUrl: 'abc/qwe',
-      headers: { requestId: '123123' },
+      headers: {requestId: '123123'},
       data: {},
     });
-  })
+  });
 
   it('should add mock with name to globalMocks array if mock is function which returns promise', async () => {
-    registerMock(() => Promise.resolve({
-      urlOrRegex: 'abc/qwe',
-      method: 'get',
-      status: 'success',
-      data: {},
-      name: 'abcd',
-    } as const));
+    registerMock(() =>
+      Promise.resolve({
+        urlOrRegex: 'abc/qwe',
+        method: 'get',
+        status: 'success',
+        data: {},
+        name: 'abcd',
+      } as const)
+    );
 
-    await Promise.resolve()
+    await Promise.resolve();
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -142,10 +148,10 @@ describe('registerMock', () => {
       name: 'abcd',
       data: {},
     });
-  })
+  });
 
   it('should add mock to globalMocks array with headers', () => {
-    registerMock('abc/qwe', 'get', 'success', {}).withHeaders({ requestId: '123123' });
+    registerMock('abc/qwe', 'get', 'success', {}).withHeaders({requestId: '123123'});
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -155,7 +161,7 @@ describe('registerMock', () => {
       url: 'abc/qwe',
       originalUrl: 'abc/qwe',
       data: {},
-      headers: { requestId: '123123' },
+      headers: {requestId: '123123'},
     });
   });
 
@@ -167,10 +173,10 @@ describe('registerMock', () => {
   });
 
   it('should add name and headers', () => {
-    registerMock('abc/qwe', 'get', 'error', {}).withHeaders({ requestId: '123123' }).withName('specialName');
+    registerMock('abc/qwe', 'get', 'error', {}).withHeaders({requestId: '123123'}).withName('specialName');
 
     expect(globalMocks[0].name).toEqual('specialName');
-    expect(globalMocks[0].headers).toEqual({ requestId: '123123' });
+    expect(globalMocks[0].headers).toEqual({requestId: '123123'});
   });
 
   it('should replace url params on __PARAM__', () => {
@@ -193,42 +199,42 @@ describe('registerMock', () => {
 
     expect(globalMocks[0].url).toBe('abc/qwe');
 
-    setBaseUrl('/rrr')
+    setBaseUrl('/rrr');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should not change url of global mock if it starts with /', () => {
     registerMock('/abc/qwe', 'get', 'success', {});
-    setBaseUrl('/rrr')
+    setBaseUrl('/rrr');
 
     expect(globalMocks[0].url).toBe('/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base url is full', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('https://example.com/rrr')
+    setBaseUrl('https://example.com/rrr');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base url is full and ends with /', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('https://example.com/rrr/')
+    setBaseUrl('https://example.com/rrr/');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base url without /', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('rrr')
+    setBaseUrl('rrr');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base ends with /', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('rrr/')
+    setBaseUrl('rrr/');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });

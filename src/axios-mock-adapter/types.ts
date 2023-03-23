@@ -1,8 +1,6 @@
-import { AxiosAdapter, AxiosInstance, AxiosRequestConfig } from 'axios';
+import {AxiosAdapter, AxiosInstance, AxiosRequestConfig} from 'axios';
 
-type CallbackResponseSpecFunc = (
-  config: AxiosRequestConfig
-) => any[] | Promise<any[]>;
+type CallbackResponseSpecFunc = (config: AxiosRequestConfig) => any[] | Promise<any[]>;
 
 type ResponseSpecFunc = <T = any>(
   statusOrCallback: number | CallbackResponseSpecFunc,
@@ -56,7 +54,7 @@ type RequestMatcherFunc = (
 declare class MockAdapter {
   constructor(axiosInstance: AxiosInstance, options?: MockAdapterOptions);
 
-  originalRequestFunc() : AxiosAdapter;
+  originalRequestFunc(): AxiosAdapter;
   adapter(): AxiosAdapter;
   reset(): void;
   resetHandlers(): void;
@@ -75,4 +73,4 @@ declare class MockAdapter {
   onUnlink: RequestMatcherFunc;
 }
 
-export default MockAdapter
+export default MockAdapter;

@@ -6,8 +6,8 @@ describe('clearAll', () => {
     localStorage.clear();
   });
 
-  const abcKey = 'abc'
-  const mockKey = `${MOCK_PREFIX}abc`
+  const abcKey = 'abc';
+  const mockKey = `${MOCK_PREFIX}abc`;
 
   it('should clear all mocks', () => {
     localStorage.setItem(abcKey, '123');

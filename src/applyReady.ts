@@ -11,7 +11,11 @@ type OverrideOptions = {
   delay?: number;
 };
 
-export const applyReady = (mockId: number | string, optionsOrWidgetName?: OverrideOptions | string, overrideOptions?: OverrideOptions): void => {
+export const applyReady = (
+  mockId: number | string,
+  optionsOrWidgetName?: OverrideOptions | string,
+  overrideOptions?: OverrideOptions
+): void => {
   const globalMocks = getAllRegisteredMocks();
 
   let mock: RegisteredMock | undefined;
@@ -24,10 +28,10 @@ export const applyReady = (mockId: number | string, optionsOrWidgetName?: Overri
     mock = globalMocks[Number(mockId) - 1];
   } else {
     mock = globalMocks.find(x => {
-      if(typeof optionsOrWidgetName === 'string') {
-        return x.name === mockId && x.widgetName === optionsOrWidgetName
+      if (typeof optionsOrWidgetName === 'string') {
+        return x.name === mockId && x.widgetName === optionsOrWidgetName;
       } else {
-        return x.name === mockId
+        return x.name === mockId;
       }
     });
   }
@@ -39,7 +43,7 @@ export const applyReady = (mockId: number | string, optionsOrWidgetName?: Overri
   const {method, url, originalUrl, data, status, headers, originalStatus} = mock;
   const isRegex = url instanceof RegExp;
 
-  const applyOptions = typeof optionsOrWidgetName === 'string' ? {} : (optionsOrWidgetName || overrideOptions || {})
+  const applyOptions = typeof optionsOrWidgetName === 'string' ? {} : optionsOrWidgetName || overrideOptions || {};
   const {data: overrideData, headers: overrideHeaders, times, status: overrideStatus, delay} = applyOptions;
 
   const finalData = overrideData ? (typeof overrideData === 'function' ? overrideData(data) : overrideData) : data;

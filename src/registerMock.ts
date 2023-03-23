@@ -1,7 +1,9 @@
 import {
   CodeStatus,
   HttpMethod,
-  RegisteredMock, RegisterFunctionArgs, RegisterMockArgs,
+  RegisteredMock,
+  RegisterFunctionArgs,
+  RegisterMockArgs,
   RegisterMockPayload,
   ResponseData,
   ResponseHeaders,
@@ -9,7 +11,7 @@ import {
 } from './types';
 import {normalizeUrl} from './normilizeUrl';
 import {addRegisteredMock, updateRegisteredMock} from './registeredMocks';
-import { areArgsFromFunction } from './lazyUtils'
+import {areArgsFromFunction} from './lazyUtils';
 
 export type WithNameBuilder = {
   withName: (mockName: string) => void;
@@ -23,37 +25,41 @@ export const getCodeByStatus = (status: CodeStatus): number => {
 };
 
 const applyParameters = ({method, headers, name, data, status, urlOrRegex}: RegisterMockPayload): void => {
-  const mock = registerStaticMock(urlOrRegex, method, status, data)
+  const mock = registerStaticMock(urlOrRegex, method, status, data);
   if (headers) {
-    mock.withHeaders(headers)
+    mock.withHeaders(headers);
   }
   if (name) {
-    mock.withName(name)
+    mock.withName(name);
   }
-}
+};
 
 function registerMock(func: () => Promise<RegisterMockPayload> | RegisterMockPayload): void;
-function registerMock(urlOrRegex: UrlOrRegex, method: HttpMethod, status: CodeStatus, data: ResponseData): WithHelpersBuilder;
+function registerMock(
+  urlOrRegex: UrlOrRegex,
+  method: HttpMethod,
+  status: CodeStatus,
+  data: ResponseData
+): WithHelpersBuilder;
 function registerMock(...args: RegisterMockArgs | RegisterFunctionArgs): void | WithHelpersBuilder {
   if (areArgsFromFunction(args)) {
-    const resultMock = args[0]()
+    const resultMock = args[0]();
     if (resultMock instanceof Promise) {
-      resultMock.then(r => applyParameters(r))
+      resultMock.then(r => applyParameters(r));
     } else {
-      applyParameters(resultMock)
+      applyParameters(resultMock);
     }
   } else {
-    const [urlOrRegex, method, status, data] = args
-    return registerStaticMock(urlOrRegex, method, status, data)
+    const [urlOrRegex, method, status, data] = args;
+    return registerStaticMock(urlOrRegex, method, status, data);
   }
 }
-
 
 const registerStaticMock = (
   urlOrRegex: UrlOrRegex,
   method: HttpMethod,
   status: CodeStatus,
-  data: ResponseData,
+  data: ResponseData
 ): WithHelpersBuilder => {
   const mockedUrl = urlOrRegex instanceof RegExp ? urlOrRegex : normalizeUrl(urlOrRegex);
   const statusNumber = getCodeByStatus(status);
@@ -83,6 +89,6 @@ const registerStaticMock = (
     withName,
     withHeaders,
   };
-}
+};
 
-export { registerMock }
+export {registerMock};

@@ -1,9 +1,10 @@
-import { DELAY_MOCK_KEY, ENABLE_MOCK_SYSTEM_KEY, MOCK_PREFIX } from './constants';
-import { getLocalStorageKeyValue, makeDelayPromise } from './utils';
+import {DELAY_MOCK_KEY, ENABLE_MOCK_SYSTEM_KEY, MOCK_PREFIX} from './constants';
+import {getLocalStorageKeyValue, makeDelayPromise} from './utils';
 
 const COPY_PASTE_DELAY = 2000; // 2 seconds to switch focus on document
 
-const isKeyFromMockSystem = (key: string) => [ENABLE_MOCK_SYSTEM_KEY, MOCK_PREFIX, DELAY_MOCK_KEY].some(x => key.startsWith(x))
+const isKeyFromMockSystem = (key: string) =>
+  [ENABLE_MOCK_SYSTEM_KEY, MOCK_PREFIX, DELAY_MOCK_KEY].some(x => key.startsWith(x));
 
 export const snapshot = (copyToClipboard = false): string | undefined => {
   const keyValuePairs: {key: string; value: string}[] = [];

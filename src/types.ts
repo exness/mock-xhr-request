@@ -18,7 +18,7 @@ export type StoredData = {
   options: Options;
   originalUrl: string;
   originalStatus: CodeStatus;
-  headers?: ResponseHeaders
+  headers?: ResponseHeaders;
 };
 export type PreparedMock = {
   method: HttpMethod;
@@ -29,7 +29,7 @@ export type PreparedMock = {
   headers?: ResponseHeaders;
   data: ResponseData;
   options: Options;
-  originalUrl: UrlOrRegex
+  originalUrl: UrlOrRegex;
 };
 
 export type RegisteredMock = {
@@ -47,21 +47,20 @@ export type RegisteredMock = {
 export type CodeStatus = number | 'success' | 'error';
 export type Times = number | 'always';
 
-export type ResponseHeaders = Record<string, string | number | boolean>
+export type ResponseHeaders = Record<string, string | number | boolean>;
 
 export type WrapAdapterOptions = {
-  baseUrl?: string
-  autoDisable?: boolean | number
-}
+  baseUrl?: string;
+  autoDisable?: boolean | number;
+};
 
 export type RegisterMockPayload = {
-  urlOrRegex: UrlOrRegex,
-  method: HttpMethod,
-  status: CodeStatus,
-  data: ResponseData,
-  name?: string,
-  headers?: ResponseHeaders
-}
-export type RegisterMockArgs = [UrlOrRegex, HttpMethod, CodeStatus, ResponseData]
-export type RegisterFunctionArgs = [() => Promise<RegisterMockPayload> | RegisterMockPayload]
-
+  urlOrRegex: UrlOrRegex;
+  method: HttpMethod;
+  status: CodeStatus;
+  data: ResponseData;
+  name?: string;
+  headers?: ResponseHeaders;
+};
+export type RegisterMockArgs = [UrlOrRegex, HttpMethod, CodeStatus, ResponseData];
+export type RegisterFunctionArgs = [() => Promise<RegisterMockPayload> | RegisterMockPayload];

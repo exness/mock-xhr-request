@@ -1,5 +1,5 @@
-import { DELAY_MOCK_KEY, MOCK_PREFIX } from '../constants'
-import { clearMock } from '../clearMock'
+import {DELAY_MOCK_KEY, MOCK_PREFIX} from '../constants';
+import {clearMock} from '../clearMock';
 
 describe('clearMock', () => {
   beforeEach(() => {
@@ -30,16 +30,16 @@ describe('clearMock', () => {
 
     expect(localStorage.getItem(`${MOCK_PREFIX}(post)[1]abc/qwe`)).toEqual('123');
     expect(localStorage.getItem(`${MOCK_PREFIX}(get)[1]abc/qwe`)).toEqual(null);
-  })
+  });
 
   it('should clear mock by regex', () => {
-    const regex = /abc\/qwe\/:\d+/
+    const regex = /abc\/qwe\/:\d+/;
     localStorage.setItem('abc', '123');
     localStorage.setItem(`${MOCK_PREFIX}(post)[1]${regex}`, '123');
 
-    clearMock(regex)
+    clearMock(regex);
 
     expect(localStorage.getItem('abc')).toEqual('123');
     expect(localStorage.getItem(`${MOCK_PREFIX}(post)${regex}`)).toEqual(null);
-  })
-})
+  });
+});

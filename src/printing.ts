@@ -1,7 +1,7 @@
 import {getMocksFromStorage} from './getMocksFromStorage';
-import { ResponseData } from './types';
+import {ResponseData} from './types';
 import {normalizeUrl} from './normilizeUrl';
-import { getAllRegisteredMocks } from './registeredMocks'
+import {getAllRegisteredMocks} from './registeredMocks';
 
 export const getSetMocks = (): Record<string, ResponseData> => {
   const allMocks = getMocksFromStorage();
@@ -16,10 +16,10 @@ export const getSetMocks = (): Record<string, ResponseData> => {
 };
 
 export const getRegisteredMocks = (url?: string): Record<string, ResponseData> => {
-  const globalMocks = getAllRegisteredMocks()
+  const globalMocks = getAllRegisteredMocks();
   const finalUrl = url ? normalizeUrl(url) : undefined;
-  const allGlobalMocks = globalMocks.map((x,i) => ({...x, index: i}));
-  let finalMocks = allGlobalMocks
+  const allGlobalMocks = globalMocks.map((x, i) => ({...x, index: i}));
+  let finalMocks = allGlobalMocks;
   if (finalUrl) {
     const strictEqualIndexes: number[] = [];
     const substringIndexes: number[] = [];
@@ -35,7 +35,7 @@ export const getRegisteredMocks = (url?: string): Record<string, ResponseData> =
   }
 
   return finalMocks.reduce((acc, {method, widgetName, name, data, originalUrl, originalStatus, index}) => {
-    const widgetPlaceholder = widgetName ? ` ${widgetName} ` : ' '
+    const widgetPlaceholder = widgetName ? ` ${widgetName} ` : ' ';
     const key = `${index + 1}${widgetPlaceholder}${originalUrl} ${originalStatus} ${method} N:${name || '-'}`;
     return {
       ...acc,

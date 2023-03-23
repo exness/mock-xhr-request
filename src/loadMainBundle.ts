@@ -1,26 +1,27 @@
-import { AxiosAdapter, AxiosInstance } from 'axios';
-import { isEnabled } from './enable';
-import { WithHelpersBuilder, WithNameBuilder } from './registerMock';
+import {AxiosAdapter, AxiosInstance} from 'axios';
+import {isEnabled} from './enable';
+import {WithHelpersBuilder, WithNameBuilder} from './registerMock';
 import {
   CodeStatus,
-  HttpMethod, RegisterFunctionArgs,
+  HttpMethod,
+  RegisterFunctionArgs,
   RegisterMockArgs,
   RegisterMockPayload,
   ResponseData,
   ResponseHeaders,
   UrlOrRegex,
 } from './types';
-import { wrapAxiosAdapter, wrapChildAxiosAdapter } from './index';
-import { storageHaveSomeMocks } from './storageHaveSomeMocks'
-import { areArgsFromFunction } from './lazyUtils'
+import {wrapAxiosAdapter, wrapChildAxiosAdapter} from './index';
+import {storageHaveSomeMocks} from './storageHaveSomeMocks';
+import {areArgsFromFunction} from './lazyUtils';
 
 type RegisterCall = {
   args: RegisterMockArgs | RegisterFunctionArgs;
   enhanceCalls: (((r: WithNameBuilder) => void) | ((r: WithHelpersBuilder) => WithNameBuilder))[];
 };
 const registerMockCalls: RegisterCall[] = [];
-const wrapAxiosCalls: { args: Parameters<typeof wrapAxiosAdapter>; originalAdapter?: AxiosAdapter }[] = [];
-const wrapChildAxiosCalls: { args: Parameters<typeof wrapChildAxiosAdapter>; originalAdapter?: AxiosAdapter }[] = [];
+const wrapAxiosCalls: {args: Parameters<typeof wrapAxiosAdapter>; originalAdapter?: AxiosAdapter}[] = [];
+const wrapChildAxiosCalls: {args: Parameters<typeof wrapChildAxiosAdapter>; originalAdapter?: AxiosAdapter}[] = [];
 
 let loadBundleResolveFunc: () => void;
 const loadBundlePromise = new Promise<void>(res => {
@@ -34,22 +35,27 @@ const replaceOriginalAdapter = (axiosInstance: AxiosInstance): AxiosAdapter | un
   let originalAdapter: AxiosAdapter | undefined;
   if (isEnabled() && !hasEnablingHappened && storageHaveSomeMocks()) {
     originalAdapter = axiosInstance.defaults.adapter as AxiosAdapter;
-    axiosInstance.defaults.adapter = (config) => {
+    axiosInstance.defaults.adapter = config => {
       return new Promise((res, rej) => {
         loadBundlePromise.then(() => {
           return (axiosInstance.defaults.adapter as AxiosAdapter)(config).then(res, rej);
         });
       });
-    }
+    };
   }
 
   return originalAdapter;
 };
 
 function lazyRegisterMock(func: () => Promise<RegisterMockPayload> | RegisterMockPayload): void;
-function lazyRegisterMock(urlOrRegex: UrlOrRegex, method: HttpMethod, status: CodeStatus, data: ResponseData): WithHelpersBuilder;
+function lazyRegisterMock(
+  urlOrRegex: UrlOrRegex,
+  method: HttpMethod,
+  status: CodeStatus,
+  data: ResponseData
+): WithHelpersBuilder;
 function lazyRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): void | Promise<void> | WithHelpersBuilder {
-  const registerMockCall: RegisterCall = { args, enhanceCalls: [] };
+  const registerMockCall: RegisterCall = {args, enhanceCalls: []};
   registerMockCalls.push(registerMockCall);
 
   const withName = (mockName: string) => {
@@ -75,12 +81,12 @@ function lazyRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): voi
 
 export const lazyWrapAxiosAdapter: typeof wrapAxiosAdapter = (...args) => {
   const originalAdapter = replaceOriginalAdapter(args[0]);
-  wrapAxiosCalls.push({ args, originalAdapter });
+  wrapAxiosCalls.push({args, originalAdapter});
 };
 
 export const lazyWrapChildAxiosAdapter: typeof wrapChildAxiosAdapter = (...args) => {
   const originalAdapter = replaceOriginalAdapter(args[0]);
-  wrapChildAxiosCalls.push({ args, originalAdapter });
+  wrapChildAxiosCalls.push({args, originalAdapter});
 };
 
 // replace original adapter, through which all not mocked requests will go
@@ -92,11 +98,11 @@ const replaceAdapterIfNeeded = (axiosInstance: AxiosInstance, adapter?: AxiosAda
 
 export const loadMainBundle = async (): Promise<void> => {
   const result = await import('./index');
-  registerMockCalls.forEach(({ args, enhanceCalls }) => {
+  registerMockCalls.forEach(({args, enhanceCalls}) => {
     if (areArgsFromFunction(args)) {
       result.registerMock(...args);
     } else {
-      const withNameBuilder = result.registerMock(...args)
+      const withNameBuilder = result.registerMock(...args);
       enhanceCalls.reduce((acc, call) => call(acc), withNameBuilder);
     }
   });
@@ -112,4 +118,4 @@ export const loadMainBundle = async (): Promise<void> => {
   loadBundleResolveFunc();
 };
 
-export { lazyRegisterMock }
+export {lazyRegisterMock};
