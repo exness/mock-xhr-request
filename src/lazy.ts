@@ -1,6 +1,8 @@
 import {enable, isEnabled} from './enable';
 import {lazyRegisterMock, lazyWrapChildAxiosAdapter, lazyWrapAxiosAdapter, loadMainBundle} from './loadMainBundle';
 
+export {MockXHRType} from './index';
+
 export type LazyMockXHR = {
   enable: typeof enable;
 };
