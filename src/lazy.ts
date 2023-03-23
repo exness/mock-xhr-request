@@ -1,3 +1,4 @@
+import {setDefaultOptions} from './defaultOptions';
 import {enable, isEnabled} from './enable';
 import {lazyRegisterMock, lazyWrapChildAxiosAdapter, lazyWrapAxiosAdapter, loadMainBundle} from './loadMainBundle';
 
@@ -31,4 +32,4 @@ const wrapAxiosAdapter = lazyWrapAxiosAdapter;
 const wrapChildAxiosAdapter = lazyWrapChildAxiosAdapter;
 const MockXHR = lazyMockXHR;
 
-export {registerMock, wrapAxiosAdapter, wrapChildAxiosAdapter, MockXHR};
+export {registerMock, wrapAxiosAdapter, wrapChildAxiosAdapter, setDefaultOptions, MockXHR};

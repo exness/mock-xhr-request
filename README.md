@@ -1,4 +1,4 @@
-# mock-xhr-request
+# @exness-tech/mock-xhr-request
 
 Mocking library, that allows to mock requests made with [axios](https://github.com/axios/axios) npm package 
 
@@ -14,17 +14,17 @@ Mocking library, that allows to mock requests made with [axios](https://github.c
 ## Install
 
 ```bash
-npm install mock-xhr-request
+npm install @exness-tech/mock-xhr-request
 ```
 Or
 ```bash
-yarn add mock-xhr-request
+yarn add @exness-tech/mock-xhr-request
 ```
 
 ### Quickstart
 
 ```typescript
-import { wrapAxiosAdapter} from 'mock-xhr-request'
+import { wrapAxiosAdapter} from '@exness-tech/mock-xhr-request'
 
 wrapAxiosAdapter(axiosInstance)
 
@@ -40,13 +40,13 @@ To start using mock system need call this function by passing axios instance as 
 Second argument "baseUrl" allow to register prepared mocks without the need to base url from the site root.
 
 ```typescript
-import { wrapAxiosAdapter} from 'mock-xhr-request'
+import { wrapAxiosAdapter} from '@exness-tech/mock-xhr-request'
 
 //Usage
-wrapAxiosAdapter(axiosInstance, { baseUrl: '/api/v2' })
+wrapAxiosAdapter(axiosInstance)
 
 // API
-wrapAxiosAdapter(axiosInstance: AxiosInstance, options?: { baseUrl?: string = '/', autoDisable?: boolean = true }): void
+wrapAxiosAdapter(axiosInstance: AxiosInstance): void
 ```
 
 ### wrapChildAxiosAdapter
@@ -54,13 +54,31 @@ if you have external widgets, which use its own axios instance, just call this f
 That will allow to set and share mocks across the application root and widget's module.
 
 ```typescript
-import { wrapChildAxiosAdapter} from 'mock-xhr-request'
+import { wrapChildAxiosAdapter} from '@exness-tech/mock-xhr-request'
 
 //Usage
-wrapChildAxiosAdapter(axiosInstance, 'userInfoWidget', { baseUrl: '/api/v2' } )
+wrapChildAxiosAdapter(axiosInstance, 'userInfoWidget')
 
 // API
-wrapChildAxiosAdapter(axiosInstance: AxiosInstance, widgetName: string, options?: { baseUrl?: string = '/', autoDisable?: boolean = true }): void
+wrapChildAxiosAdapter(axiosInstance: AxiosInstance, widgetName: string): void
+```
+
+### setDefaultOptions
+To change default options call this function, passing an object possible keys: 
+1) autoDisable - time in milliseconds to auto disable mock system
+2) baseUrl - url which stars from / or http to allow register mocks with url path, relative to baseUrl
+3) successStatusCode - status code, that will be used when calling success method
+4) errorStatusCode - status code, that will be used when calling error method
+
+```typescript
+import { setDefaultOptions} from '@exness-tech/mock-xhr-request'
+
+setDefaultOptions({
+  successStatusCode?: number = 200,
+  errorStatusCode?: number = 424,
+  baseUrl?: string = '/',
+  autoDisable?: boolean | number = 2000, // 2 seconds
+})
 ```
 
 ### registerMock
@@ -78,7 +96,7 @@ Url path as a string value supports several placeholders:
 Instead of string URL path you can use RegExp.
 
 ```typescript
-import { registerMock} from 'mock-xhr-request'
+import { registerMock} from '@exness-tech/mock-xhr-request'
 
 // Usage
 const mockedUserInfo = { firstName: 'John', lastName: 'Doe' }
@@ -190,7 +208,7 @@ This section describes the api of MockXHR global variable, that appears as globa
 
 ### MockXHR.enable
 To enable mock system, call this function. In simple mode(not lazy) you can set/delete mocks without enabling mock system. To see the result, refresh the web page. 
-All set mocks are applied only after refresh. If you want to use lazy load, switch to import from ``mock-xhr-request/lazy``. Call this function to load mock system library in browser context.
+All set mocks are applied only after refresh. If you want to use lazy load, switch to import from ``@exness-tech/mock-xhr-request/lazy``. Call this function to load mock system library in browser context.
 After the first load the js bundle should be cached. You can start setting mocks without page refresh. Mock system should be enabled already at this time.
 
 ```typescript
@@ -203,7 +221,7 @@ MockXHR.enable()
 
 ### MockXHR.disable
 To disable mock system call this function. Disabling will not clear the set mocks. Don't forget to refresh the web page.
-If you want to use lazy load, switch to import from ``mock-xhr-request/lazy``. Call this function to unload mock system library from browser context.
+If you want to use lazy load, switch to import from ``@exness-tech/mock-xhr-request/lazy``. Call this function to unload mock system library from browser context.
 On the next web page refresh, mock system will stop loading its main js bundle, but that doesn't mean, that it will be unloaded from browser cache.
 
 ```typescript
@@ -415,7 +433,7 @@ Second parameter of wrapAxiosAdapter function is base url, all mocked url will b
 
 ```typescript
 import axios from 'axios'
-import { wrapAxiosAdapter, registerMock } from 'mock-xhr-request'
+import { wrapAxiosAdapter, registerMock } from '@exness-tech/mock-xhr-request'
 
 const isProd = process.env.NODE_ENV !== 'production';
 const baseApiUrl = isProd ? 'http://localhost:8080/api/v2' : '/api/v2';

@@ -16,7 +16,7 @@ import {setBaseUrl} from './baseUrl';
 import {setWidgetName} from './widgetName';
 import {setGlobalMocksToWindow} from './registeredMocks';
 import {tryToAutoDisable} from './autoDisable';
-import {WrapAdapterOptions} from './types';
+import {getDefaultOptions, setDefaultOptions} from './defaultOptions';
 
 export type MockXHRType = MockType & {
   clearAll: typeof clearAll;
@@ -47,15 +47,10 @@ const MockXHR: MockXHRType = {
   applyReady,
 };
 
-const enhanceOptions = ({autoDisable = true, baseUrl = '/'}: WrapAdapterOptions): Required<WrapAdapterOptions> => ({
-  autoDisable,
-  baseUrl,
-});
+const wrapAxiosAdapter = (axiosInstance: AxiosInstance): void => {
+  const {disableTimeMs, baseUrl} = getDefaultOptions();
 
-const wrapAxiosAdapter = (axiosInstance: AxiosInstance, options: WrapAdapterOptions = {}): void => {
-  const {autoDisable, baseUrl} = enhanceOptions(options);
-
-  if (autoDisable) {
+  if (disableTimeMs) {
     tryToAutoDisable();
   }
   if (isEnabled()) {
@@ -71,9 +66,8 @@ const wrapAxiosAdapter = (axiosInstance: AxiosInstance, options: WrapAdapterOpti
 const wrapChildAxiosAdapter = (
   axiosInstance: AxiosInstance,
   widgetName: string,
-  options: WrapAdapterOptions = {}
 ): void => {
-  const {baseUrl} = enhanceOptions(options);
+  const {baseUrl} = getDefaultOptions();
 
   if (isEnabled()) {
     const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
@@ -84,4 +78,4 @@ const wrapChildAxiosAdapter = (
   }
 };
 
-export {wrapAxiosAdapter, wrapChildAxiosAdapter, registerMock, MockXHR};
+export {wrapAxiosAdapter, wrapChildAxiosAdapter, registerMock, setDefaultOptions, MockXHR};

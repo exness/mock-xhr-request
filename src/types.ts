@@ -49,10 +49,16 @@ export type Times = number | 'always';
 
 export type ResponseHeaders = Record<string, string | number | boolean>;
 
-export type WrapAdapterOptions = {
+export type DefaultOptions = {
+  successStatusCode?: number
+  errorStatusCode?: number
   baseUrl?: string;
   autoDisable?: boolean | number;
 };
+
+export type RequiredDefaultOptions = Required<Omit<DefaultOptions, 'autoDisable'>> & {
+  disableTimeMs: number
+}
 
 export type RegisterMockPayload = {
   urlOrRegex: UrlOrRegex;

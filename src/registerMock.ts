@@ -12,6 +12,7 @@ import {
 import {normalizeUrl} from './normilizeUrl';
 import {addRegisteredMock, updateRegisteredMock} from './registeredMocks';
 import {areArgsFromFunction} from './lazyUtils';
+import {getDefaultOptions} from './defaultOptions';
 
 export type WithNameBuilder = {
   withName: (mockName: string) => void;
@@ -21,7 +22,8 @@ export type WithHelpersBuilder = {
 } & WithNameBuilder;
 
 export const getCodeByStatus = (status: CodeStatus): number => {
-  return status === 'success' ? 200 : status === 'error' ? 424 : status;
+  const {successStatusCode, errorStatusCode} = getDefaultOptions();
+  return status === 'success' ? successStatusCode : status === 'error' ? errorStatusCode : status;
 };
 
 const applyParameters = ({method, headers, name, data, status, urlOrRegex}: RegisterMockPayload): void => {

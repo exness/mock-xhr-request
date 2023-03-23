@@ -1,9 +1,10 @@
 import {LAST_TIME_ENABLED} from './constants';
 import {disable} from './enable';
-
-const MAX_ENABLE_INTERVAL = 1000 * 60 * 60 * 24 * 2; // 2 days
+import { getDefaultOptions } from './defaultOptions'
 
 export const tryToAutoDisable = (): void => {
+  const { disableTimeMs } = getDefaultOptions();
+
   const lastTimeEnabled = localStorage.getItem(LAST_TIME_ENABLED);
   if (!lastTimeEnabled) {
     return;
@@ -15,7 +16,7 @@ export const tryToAutoDisable = (): void => {
     return;
   }
 
-  if (Date.now() - lastTime > MAX_ENABLE_INTERVAL) {
+  if (Date.now() - lastTime > disableTimeMs) {
     disable();
   }
 };
