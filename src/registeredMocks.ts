@@ -1,6 +1,6 @@
 import {RegisteredMock} from './types';
 import {getWidgetName} from './widgetName';
-import {getBaseUrl} from './baseUrl';
+import {getRelativeBaseUrl} from './baseUrl';
 
 const registeredMocks: RegisteredMock[] = [];
 const mockNames = new Set<string>();
@@ -38,7 +38,7 @@ const showBaseUrlMissedErrorOnce = () => {
 };
 
 const mergeWithBaseUrl = (urlOrRegexp: string | RegExp): string | RegExp => {
-  const baseUrl = getBaseUrl();
+  const baseUrl = getRelativeBaseUrl();
   if (urlOrRegexp instanceof RegExp || baseUrl === undefined) {
     return urlOrRegexp;
   }

@@ -1,7 +1,17 @@
 import {normalizeUrl} from './normilizeUrl';
 import {getCodeByStatus} from './registerMock';
 import {ALWAYS_TIME} from './constants';
-import {CodeStatus, HttpMethod, Times, ResponseData, Options, UrlOrRegex, ResponseHeaders} from './types';
+import {
+  CodeStatus,
+  HttpMethod,
+  Times,
+  ResponseData,
+  Options,
+  UrlOrRegex,
+  ResponseHeaders,
+  MockType,
+  StatusBuilder,
+} from './types';
 import {saveMock} from './utils';
 import {getAllRegisteredMocks} from './registeredMocks';
 
@@ -59,13 +69,6 @@ const dataBuilder =
     });
   };
 
-type StatusBuilder = {
-  error: (data?: ResponseData, headers?: ResponseHeaders) => void;
-  success: (data?: ResponseData, headers?: ResponseHeaders) => void;
-  withStatus: (status: number, data: ResponseData, headers?: ResponseHeaders) => void;
-  withDelay: (delay: number) => StatusBuilder;
-};
-
 const methodBuilder =
   (method: HttpMethod, options: Options = {}) =>
   (url: UrlOrRegex, times: Times = ALWAYS_TIME): StatusBuilder => {
@@ -85,16 +88,6 @@ const methodBuilder =
       withDelay: (delay: number) => methodBuilder(method, {delay})(url, times),
     };
   };
-
-type MockMethodBuilder = ReturnType<typeof methodBuilder>;
-
-export type MockType = {
-  get: MockMethodBuilder;
-  post: MockMethodBuilder;
-  patch: MockMethodBuilder;
-  put: MockMethodBuilder;
-  delete: MockMethodBuilder;
-};
 
 export const Mock: MockType = {
   get: methodBuilder('get'),

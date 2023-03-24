@@ -3,8 +3,8 @@ import {addBaseUrlToRegisteredMocks} from './registeredMocks';
 
 let baseUrl: string | undefined;
 
-export const getBaseUrl = (): string | undefined => baseUrl;
-export const setBaseUrl = (url: string): void => {
+export const getRelativeBaseUrl = (): string | undefined => baseUrl;
+export const setRelativeBaseUrl = (url: string): void => {
   baseUrl = getRelativeUrl(url);
   if (!baseUrl.startsWith('/')) {
     baseUrl = `/${baseUrl}`;

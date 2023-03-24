@@ -1,5 +1,5 @@
 import {AxiosInstance} from 'axios';
-import {Mock, MockType} from './mockBuilder';
+import {Mock} from './mockBuilder';
 import {registerMock} from './registerMock';
 import {clearMock} from './clearMock';
 import {clearAll} from './clearAll';
@@ -12,25 +12,14 @@ import {enable, disable, isEnabled} from './enable';
 // @ts-ignore
 import {MockAdapter} from './axios-mock-adapter/MockAdapter';
 import {applyReady} from './applyReady';
-import {setBaseUrl} from './baseUrl';
+import {setRelativeBaseUrl} from './baseUrl';
 import {setWidgetName} from './widgetName';
 import {setGlobalMocksToWindow} from './registeredMocks';
 import {tryToAutoDisable} from './autoDisable';
 import {getDefaultOptions, setDefaultOptions} from './defaultOptions';
+import { MockXHRType } from './types'
 
-export type MockXHRType = MockType & {
-  clearAll: typeof clearAll;
-  clearMock: typeof clearMock;
-  setDelayResponseTime: typeof setDelayResponseTime;
-  clearDelayResponseTime: typeof clearDelayResponseTime;
-  snapshot: typeof snapshot;
-  applySnapshot: typeof applySnapshot;
-  getSetMocks: typeof getSetMocks;
-  getRegisteredMocks: typeof getRegisteredMocks;
-  enable: typeof enable;
-  disable: typeof disable;
-  applyReady: typeof applyReady;
-};
+export * from './exportedTypes'
 
 const MockXHR: MockXHRType = {
   ...Mock,
@@ -55,7 +44,7 @@ const wrapAxiosAdapter = (axiosInstance: AxiosInstance): void => {
   }
   if (isEnabled()) {
     const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
-    setBaseUrl(baseUrl);
+    setRelativeBaseUrl(baseUrl);
     setGlobalMocksToWindow();
     registerAllMocks(adapter, baseUrl);
   }
@@ -63,15 +52,12 @@ const wrapAxiosAdapter = (axiosInstance: AxiosInstance): void => {
   window.MockXHR = MockXHR;
 };
 
-const wrapChildAxiosAdapter = (
-  axiosInstance: AxiosInstance,
-  widgetName: string,
-): void => {
+const wrapChildAxiosAdapter = (axiosInstance: AxiosInstance, widgetName: string): void => {
   const {baseUrl} = getDefaultOptions();
 
   if (isEnabled()) {
     const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
-    setBaseUrl(baseUrl);
+    setRelativeBaseUrl(baseUrl);
     setWidgetName(widgetName);
     setGlobalMocksToWindow();
     registerAllMocks(adapter, baseUrl);

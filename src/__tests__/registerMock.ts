@@ -1,13 +1,13 @@
-import {PARAM_KEY} from '../constants';
-import {registerMock} from '../registerMock';
-import {__resetGlobalMocks, getAllRegisteredMocks} from '../registeredMocks';
-import {getBaseUrl} from '../baseUrl';
+import { PARAM_KEY } from '../constants';
+import { registerMock } from '../registerMock';
+import { __resetGlobalMocks, getAllRegisteredMocks } from '../registeredMocks';
+import { getRelativeBaseUrl } from '../baseUrl';
 
 jest.mock('../baseUrl', () => ({
-  getBaseUrl: jest.fn()
+  getRelativeBaseUrl: jest.fn(),
 }))
 
-const getBaseUrlMock = getBaseUrl as jest.Mock
+const getBaseUrlMock = getRelativeBaseUrl as jest.Mock
 
 describe('registerMock', () => {
   const globalMocks = getAllRegisteredMocks();
@@ -32,7 +32,7 @@ describe('registerMock', () => {
   });
 
   it('should add mock to globalMocks array if mock is function', () => {
-    registerMock(() => ({urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {}}));
+    registerMock(() => ({ urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {} }));
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -46,7 +46,7 @@ describe('registerMock', () => {
   });
 
   it('should add mock with name to globalMocks array if mock is function', () => {
-    registerMock(() => ({urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {}, name: 'abcd'}));
+    registerMock(() => ({ urlOrRegex: 'abc/qwe', method: 'get', status: 'success', data: {}, name: 'abcd' }));
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -67,7 +67,7 @@ describe('registerMock', () => {
       status: 'success',
       data: {},
       name: 'abcd',
-      headers: {requestId: '123123'},
+      headers: { requestId: '123123' },
     }));
 
     expect(globalMocks).toHaveLength(1);
@@ -79,7 +79,7 @@ describe('registerMock', () => {
       originalUrl: 'abc/qwe',
       name: 'abcd',
       data: {},
-      headers: {requestId: '123123'},
+      headers: { requestId: '123123' },
     });
   });
 
@@ -90,7 +90,7 @@ describe('registerMock', () => {
         method: 'get',
         status: 'success',
         data: {},
-      } as const)
+      } as const),
     );
 
     await Promise.resolve();
@@ -113,8 +113,8 @@ describe('registerMock', () => {
         method: 'get',
         status: 'success',
         data: {},
-        headers: {requestId: '123123'},
-      } as const)
+        headers: { requestId: '123123' },
+      } as const),
     );
 
     await Promise.resolve();
@@ -126,7 +126,7 @@ describe('registerMock', () => {
       originalStatus: 'success',
       url: 'abc/qwe',
       originalUrl: 'abc/qwe',
-      headers: {requestId: '123123'},
+      headers: { requestId: '123123' },
       data: {},
     });
   });
@@ -139,7 +139,7 @@ describe('registerMock', () => {
         status: 'success',
         data: {},
         name: 'abcd',
-      } as const)
+      } as const),
     );
 
     await Promise.resolve();
@@ -157,7 +157,7 @@ describe('registerMock', () => {
   });
 
   it('should add mock to globalMocks array with headers', () => {
-    registerMock('abc/qwe', 'get', 'success', {}).withHeaders({requestId: '123123'});
+    registerMock('abc/qwe', 'get', 'success', {}).withHeaders({ requestId: '123123' });
 
     expect(globalMocks).toHaveLength(1);
     expect(globalMocks[0]).toEqual({
@@ -167,7 +167,7 @@ describe('registerMock', () => {
       url: 'abc/qwe',
       originalUrl: 'abc/qwe',
       data: {},
-      headers: {requestId: '123123'},
+      headers: { requestId: '123123' },
     });
   });
 
@@ -179,10 +179,10 @@ describe('registerMock', () => {
   });
 
   it('should add name and headers', () => {
-    registerMock('abc/qwe', 'get', 'error', {}).withHeaders({requestId: '123123'}).withName('specialName');
+    registerMock('abc/qwe', 'get', 'error', {}).withHeaders({ requestId: '123123' }).withName('specialName');
 
     expect(globalMocks[0].name).toEqual('specialName');
-    expect(globalMocks[0].headers).toEqual({requestId: '123123'});
+    expect(globalMocks[0].headers).toEqual({ requestId: '123123' });
   });
 
   it('should replace url params on __PARAM__', () => {

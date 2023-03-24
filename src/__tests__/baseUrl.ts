@@ -1,6 +1,6 @@
 import { registerMock } from '../registerMock'
 import { __resetGlobalMocks, getAllRegisteredMocks } from '../registeredMocks'
-import { __setTestBaseUrl, setBaseUrl } from '../baseUrl'
+import { __setTestBaseUrl, setRelativeBaseUrl } from '../baseUrl'
 
 describe('baseUrl', () => {
   const globalMocks = getAllRegisteredMocks();
@@ -15,42 +15,42 @@ describe('baseUrl', () => {
 
     expect(globalMocks[0].url).toBe('abc/qwe');
 
-    setBaseUrl('/rrr');
+    setRelativeBaseUrl('/rrr');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should not change url of global mock if it starts with /', () => {
     registerMock('/abc/qwe', 'get', 'success', {});
-    setBaseUrl('/rrr');
+    setRelativeBaseUrl('/rrr');
 
     expect(globalMocks[0].url).toBe('/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base url is full', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('https://example.com/rrr');
+    setRelativeBaseUrl('https://example.com/rrr');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base url is full and ends with /', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('https://example.com/rrr/');
+    setRelativeBaseUrl('https://example.com/rrr/');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base url without /', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('rrr');
+    setRelativeBaseUrl('rrr');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });
 
   it('should change url of global mock if it does not start with / and base ends with /', () => {
     registerMock('abc/qwe', 'get', 'success', {});
-    setBaseUrl('rrr/');
+    setRelativeBaseUrl('rrr/');
 
     expect(globalMocks[0].url).toBe('/rrr/abc/qwe');
   });

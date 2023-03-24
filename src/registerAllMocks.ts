@@ -4,16 +4,36 @@ import {getMocksFromStorage} from './getMocksFromStorage';
 import {ALWAYS_TIME, OPTIONAL_SEARCH_KEY, PARAM_KEY, REQUIRED_SEARCH_KEY} from './constants';
 import {makeDelayPromise} from './utils';
 
-const getFullUrlToMock = (baseUrl: string, url: string): string => {
-  if (url.startsWith(baseUrl)) {
-    return url;
+const getBaseUrlForRelativeUrl = (baseUrl: string): string => {
+  if (baseUrl.startsWith('http')) {
+    return baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
   }
-  if (!url.startsWith('/')) {
-    return baseUrl + (baseUrl.endsWith('/') ? '' : '/') + url;
-  }
-  const {origin} = new URL(baseUrl);
 
-  return `${origin}${url}`;
+  const finalBaseUrl = baseUrl.startsWith('/') ? baseUrl : '/' + baseUrl;
+  return finalBaseUrl.endsWith('/') ? finalBaseUrl : finalBaseUrl + '/';
+};
+
+// baseUrl could be relative or starts with http
+const getFullUrlToMock = (baseUrl: string, relativeUrl: string): string => {
+  if (relativeUrl.startsWith(baseUrl)) {
+    return relativeUrl;
+  }
+
+  if (baseUrl === '/') {
+    return relativeUrl;
+  }
+
+  if (!relativeUrl.startsWith('/')) {
+    return getBaseUrlForRelativeUrl(baseUrl) + relativeUrl;
+  }
+
+  if (baseUrl.startsWith('http')) {
+    const {origin} = new URL(baseUrl);
+    return `${origin}${relativeUrl}`;
+  }
+
+  const finalBaseUrl = getBaseUrlForRelativeUrl(baseUrl);
+  return finalBaseUrl + relativeUrl.slice(1);
 };
 
 const escapeRegExp = (str: string): string => {
@@ -24,8 +44,8 @@ const paramRegex = new RegExp(PARAM_KEY, 'g');
 const optionalSearchRegex = new RegExp(OPTIONAL_SEARCH_KEY);
 const requiredSearchRegex = new RegExp(REQUIRED_SEARCH_KEY);
 
-const getRegexPattern = (baseUrl: string, url: string): string | RegExp => {
-  const finalUrl = getFullUrlToMock(baseUrl, url);
+const getRegexPattern = (baseUrl: string, relativeUrl: string): string | RegExp => {
+  const finalUrl = getFullUrlToMock(baseUrl, relativeUrl);
   if (![PARAM_KEY, OPTIONAL_SEARCH_KEY, REQUIRED_SEARCH_KEY].some(x => finalUrl.includes(x))) {
     return finalUrl;
   }

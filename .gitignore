@@ -8,4 +8,4 @@ lib
 package/
 .DS_Store
 yarn-error.log
-lazy.d.ts
+/lazy

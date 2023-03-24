@@ -1,7 +1,7 @@
 import {Mock} from '../mockBuilder';
 import {registerMock} from '../registerMock';
 import {stringifyMockData} from '../utils';
-import {setBaseUrl} from '../baseUrl';
+import {setRelativeBaseUrl} from '../baseUrl';
 import {__resetGlobalMocks} from '../registeredMocks';
 import {applyReady} from '../applyReady';
 
@@ -9,7 +9,7 @@ describe('mockBuilder', () => {
   beforeEach(() => {
     localStorage.clear();
     __resetGlobalMocks();
-    setBaseUrl('');
+    setRelativeBaseUrl('');
   });
 
   it('should set mock', () => {
@@ -139,7 +139,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set', () => {
-    setBaseUrl('https://example.com');
+    setRelativeBaseUrl('https://example.com');
     Mock.get('https://example.com/abc/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -148,7 +148,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set, but mocked one is relative', () => {
-    setBaseUrl('https://example.com');
+    setRelativeBaseUrl('https://example.com');
     Mock.get('/abc/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -157,7 +157,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set and ends on /', () => {
-    setBaseUrl('https://example.com/');
+    setRelativeBaseUrl('https://example.com/');
     Mock.get('https://example.com/abc/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -166,7 +166,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set and ends on / and mocked one is relative', () => {
-    setBaseUrl('https://example.com/');
+    setRelativeBaseUrl('https://example.com/');
     Mock.get('/abc/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -175,7 +175,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set it is relative', () => {
-    setBaseUrl('/abc');
+    setRelativeBaseUrl('/abc');
     Mock.get('https://example.com/abc/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -184,7 +184,7 @@ describe('mockBuilder', () => {
   });
 
   it('should not truncate the url if base url is set it is relative and mocked one is relative', () => {
-    setBaseUrl('/abc');
+    setRelativeBaseUrl('/abc');
     Mock.get('/rrr/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/rrr/qwe'))!;
@@ -193,7 +193,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set it is relative and mocked one is relative and all starts with /', () => {
-    setBaseUrl('/abc');
+    setRelativeBaseUrl('/abc');
     Mock.get('/abc/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -202,7 +202,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set it is relative and mocked one is relative and all starts with / and ends with /', () => {
-    setBaseUrl('/abc/');
+    setRelativeBaseUrl('/abc/');
     Mock.get('/abc/qwe/').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -211,7 +211,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set it is relative and mocked one is relative and all starts with / and mocked ends with /', () => {
-    setBaseUrl('/abc');
+    setRelativeBaseUrl('/abc');
     Mock.get('/abc/qwe/').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -220,7 +220,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set it is relative and ends on /', () => {
-    setBaseUrl('/abc/');
+    setRelativeBaseUrl('/abc/');
     Mock.get('https://example.com/abc/qwe').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;
@@ -229,7 +229,7 @@ describe('mockBuilder', () => {
   });
 
   it('should truncate the url if base url is set it is relative and ends on /', () => {
-    setBaseUrl('/abc/');
+    setRelativeBaseUrl('/abc/');
     Mock.get('https://example.com/abc/qwe/').success({f: 12});
 
     const result = localStorage.getItem(stringifyMockData('get', 'always', '/abc/qwe'))!;

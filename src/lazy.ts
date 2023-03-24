@@ -2,7 +2,7 @@ import {setDefaultOptions} from './defaultOptions';
 import {enable, isEnabled} from './enable';
 import {lazyRegisterMock, lazyWrapChildAxiosAdapter, lazyWrapAxiosAdapter, loadMainBundle} from './loadMainBundle';
 
-export {MockXHRType} from './index';
+export * from './exportedTypes'
 
 export type LazyMockXHR = {
   enable: typeof enable;
