@@ -74,6 +74,22 @@ describe('mockBuilder', () => {
     });
   });
 
+  it('should set mocks in order', () => {
+    Mock.post('/abc/qwe', 1).withStatus(404, {f: 12}, {requestId: '12313'});
+
+    const result = localStorage.getItem(stringifyMockData('post', 1, '/abc/qwe'))!;
+
+    expect(JSON.parse(result)).toEqual({
+      data: {f: 12},
+      status: 404,
+      options: {},
+      isRegex: false,
+      originalUrl: '/abc/qwe',
+      originalStatus: 404,
+      headers: {requestId: '12313'},
+    });
+  });
+
   it('should set delay', () => {
     Mock.put('/abc/qwe').withDelay(2000).success({f: 12});
 

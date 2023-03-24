@@ -22,5 +22,7 @@ export const getMocksFromStorage = (): PreparedMock[] => {
     });
   }
 
-  return preparedMocks.sort((a, b) => String(a).localeCompare(String(b)));
+  return preparedMocks
+    .sort((a, b) => String(a.times).localeCompare(String(b.times)))
+    .sort((a, b) => String(a).localeCompare(String(b)));
 };

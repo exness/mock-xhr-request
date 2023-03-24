@@ -1,15 +1,16 @@
 # @exness-tech/mock-xhr-request
 
-Mocking library, that allows to mock requests made with [axios](https://github.com/axios/axios) npm package 
+Mocking library, that allows mocking AJAX requests made with [axios](https://github.com/axios/axios) npm package 
 
 ### Features
 
-- Mock requests right in browser console
+- Mock AJAX requests right in the browser console
 - Do it everywhere, even on production(if you want)
 - Set up with one line of code
 - Supports lazy load
 - Easy to share the whole mock environment
 - Supports mocking in external components(e.g. by webpack module federation)
+- Allows preparing mocks in the application, even in lazy load mode
 
 ## Install
 
@@ -36,8 +37,7 @@ MockXHR.get('/api/account/:id/information').success({ firstName: 'John', lastNam
 ## Library API
 
 ### wrapAxiosAdapter
-To start using mock system need call this function by passing axios instance as a first argument.
-Second argument "baseUrl" allow to register prepared mocks without the need to base url from the site root.
+To start using the mock system call this function by passing axios instance as a first argument.
 
 ```typescript
 import { wrapAxiosAdapter} from '@exness-tech/mock-xhr-request'
@@ -50,8 +50,8 @@ wrapAxiosAdapter(axiosInstance: AxiosInstance): void
 ```
 
 ### wrapChildAxiosAdapter
-if you have external widgets, which use its own axios instance, just call this function in their module. 
-That will allow to set and share mocks across the application root and widget's module.
+If you have external widgets, which use their own axios instance, just call this function in their module.
+That will allow us to set and share mocks across the application root and widget's module.
 
 ```typescript
 import { wrapChildAxiosAdapter} from '@exness-tech/mock-xhr-request'
@@ -64,11 +64,11 @@ wrapChildAxiosAdapter(axiosInstance: AxiosInstance, widgetName: string): void
 ```
 
 ### setDefaultOptions
-To change default options call this function, passing an object possible keys: 
-1) autoDisable - time in milliseconds to auto disable mock system
-2) baseUrl - url which stars from / or http to allow register mocks with url path, relative to baseUrl
-3) successStatusCode - status code, that will be used when calling success method
-4) errorStatusCode - status code, that will be used when calling error method
+To change default options call this function, passing an object's possible keys:
+1) autoDisable - time in milliseconds to auto-disable mock system
+2) baseUrl - URL which stars from / or HTTP to allow register mocks with URL path, relative to baseUrl
+3) successStatusCode - status code, that will be used when calling the success method
+4) errorStatusCode - status code, that will be used when calling the error method
 
 ```typescript
 import { setDefaultOptions} from '@exness-tech/mock-xhr-request'
@@ -82,18 +82,18 @@ setDefaultOptions({
 ```
 
 ### registerMock
-To prepare mock in application, call this function with all required arguments, which are
-1) Url path - started with / if set from the site root, or without /, then it will be registered based on passed baseUrl argument
+To prepare a mock in the application, call this function with all required arguments, which are
+1) Url path - started with/if set from the site root, or without /, then it will be registered based on the passed baseUrl argument
 2) Http method (get/post/patch/put/delete)
 3) Status code or success(200)/error(424) key word
 4) Mock data represented by JSON object
 
-Url path as a string value supports several placeholders:
-1) Any word - ``:someWord``, where under someWord variable could be sequence of letters with numbers.
-2) Required search - ``:!search``, used at the end of Url path to signify, that the Url search should be present.
+URL path as a string value supports several placeholders:
+1) Any word - ``:someWord``, where under someWord variable could be a sequence of letters with numbers.
+2) Required search - ``:!search``, used at the end of the URL path to signify, that the Url search should be present.
 3) Non required search - ``:?search`` not required Url search.
 
-Instead of string URL path you can use RegExp.
+Instead of a string URL path, you can use RegExp.
 
 ```typescript
 import { registerMock} from '@exness-tech/mock-xhr-request'
@@ -233,17 +233,17 @@ MockXHR.disable()
 ```
 
 ### MockXHR.get/post/patch/put/delete
-To mock request in browser console call one of the methods (get/post/patch/put/delete) and pass url path. Then call one of the continuation methods:
+To mock request in browser console call one of the methods (get/post/patch/put/delete) and pass URL path. Then call one of the continuation methods:
 1) success - that will set 200 code response.
 2) error - is equivalent to 424 status code.
 3) withStatus - here you can specify any number status code as first argument, second and other ones are the same as in success/error methods.
 4) withDelay - before calling success/error/withStatus methods you can call this one to set response delay in milliseconds.
 
 The second argument for http method function(get/post/...) is order number. You can set mocks in order. 
-The mock with last order number of mock without order will be used as default for specified url path.
+The mock with last order number of mock without order will be used as default for specified URL path.
 
-The url path could string with placeholders(any word, required and optional search) or RegExp. 
-if you call ``success`` or ``error`` functions without arguments, the mock system will try to apply the prepared mock, if url path matches. 
+The URL path could string with placeholders(any word, required and optional search) or RegExp. 
+if you call ``success`` or ``error`` functions without arguments, the mock system will try to apply the prepared mock, if URL path matches. 
 
 ```typescript
 // Usage
@@ -287,9 +287,9 @@ MockXHR
 ```
 
 ### MockXHR.applyReady
-To apply prepared mock call this function with mock name or index number, which you can get by calling ``MockXHR.getSetMocks()``.
-You can pass modifier object to change prepared mock value. All properties in modifier object are optional.
-If prepared mock name is the same as for main site, you need to pass widget name avoid collide. 
+To apply the prepared mock call this function with a mock name or index number, which you can get by calling ``MockXHR.getSetMocks()``.
+You can pass the modifier object to change the prepared mock value. All properties in the modifier object are optional.
+If the prepared mock name is the same as for the main site, you need to pass the widget name to avoid collisions.
 
 ```typescript
 // Usage
@@ -316,7 +316,7 @@ MockXHR.applyReady(mockNameOrIndex: number | string, widgetName?: string, option
 ```
 
 ### MockXHR.setDelayResponseTime
-Call it with passing delay time in milliseconds. That will set response delay time in ms for all mocks. Local call withDelay has more priority.
+Call it with passing delay time in milliseconds. That will set the response delay time in ms for all mocks. Local call of "withDelay" function has more priority.
 
 ```typescript
 //Usage
@@ -327,7 +327,7 @@ MockXHR.setDelayResponseTime(delayMs: number);
 ```
 
 ### MockXHR.clearDelayResponseTime
-To remove global response delat time call this function.
+To remove global response delay time call this function.
 
 ```typescript
 //Usage
@@ -338,15 +338,15 @@ MockXHR.clearDelayResponseTime();
 ```
 
 ### MockXHR.clearMock
-To clear specified mock call this function passing its index number (from getSetMocks) or url path, that was used when setting it.
-If you delete mock by url path, you can also specify http method. That will delete only specified mock, not all mocks, which url paths match passed one.
+To clear specified mock calls this function passes its index number (from getSetMocks) or URL path, that was used when setting it.
+If you delete the mock by URL path, you can also specify the HTTP method. That will delete only specified mock, not all, in which URL paths match the passed one.
 
 ```typescript
 //Usage
 MockXHR.clearMock('/api/account/:id/information');
 // Or with index number
 MockXHR.clearMock(3);
-// By url path and http method
+// By URL path and http method
 MockXHR.clearMock('/api/account/:id/information', 'get');
 
 // API
@@ -354,7 +354,7 @@ MockXHR.clearMock(urlOrRegex: number | string | RegExp, method?: 'get' | 'post' 
 ```
 
 ### MockXHR.clearAll
-To clear all set in console mocks, call this function without arguments. If you want to clear also global delay time and disable mock system, pass ``true``.
+To clear all set in console mocks, call this function without arguments. If you want to also clear global delay time and disable the mock system, pass ``true``.
 
 ```typescript
 //Usage
@@ -367,8 +367,9 @@ MockXHR.clearAll(clearEverything: boolean);
 ```
 
 ### MockXHR.snapshot
-To get a serialized string of all set mocks, call this function. In return, you will get a string, that should be passed to applySnapshot function to set the same mock environment. 
-If you want to set this string in your copy/paste buffer, pass ``true`` in arguments and set within 2 seconds focus on browser.
+To get a serialized string of all set mocks, call this function. In return, you will get a string, that should be passed to the "applySnapshot" function to set the same mock environment.
+If you want to set this string in your copy/paste buffer, pass ``true`` in arguments and set it within 2 seconds focus on the browser.
+
 ```typescript
 // Usage
 MockXHR.snapshot() // copy the result from the browser console
@@ -380,8 +381,8 @@ MockXHR.snapshot(copyToClipboard: boolean = false): string | void
 ```
 
 ### MockXHR.applySnapshot
-To apply serialized mocks pass string as argument to this function. 
-If you want to take serialized string from your copy/paste buffer, pass ``true`` in arguments and set within 2 seconds focus on browser.
+To apply serialized mocks pass a string as an argument to this function.
+If you want to take a serialized string from your copy/paste buffer, pass ``true`` in arguments and set it within 2 seconds focusing on the browser.
 
 ```typescript
 // Usage
@@ -394,7 +395,7 @@ MockXHR.applySnapshot(value: string | true);
 ```
 
 ### MockXHR.getSetMocks
-To get a list of all set mocks, call this function. You will return the JSON object, that will be nicely rendered by browser in console.
+To get a list of all set mocks, call this function. You will receive the JSON object, which will be nicely rendered by the browser in the console.
 
 ```typescript
 // Usage
@@ -405,7 +406,7 @@ MockXHR.getSetMocks(): Record<string, object>
 ```
 
 ### MockXHR.getRegisteredMocks
-To get a list of all prepared in app mocks, including mocks from external components. 
+To get a list of all prepared in-app mocks, including mocks from external components.
 
 ```typescript
 // Usage
@@ -421,11 +422,11 @@ MockXHR.getRegisteredMocks(url?: string): Record<string, object>
 
 Local delay time always takes precedence for global one.
 
-Relative url - start with **/**. Example - **company_info/:secret**
+Relative URL - start with **/**. Example - **company_info/:secret**
 
 Absolute one - without **/**. Example - **/v3/async/company_info/:secret**
 
-Second parameter of wrapAxiosAdapter function is base url, all mocked url will be based on it.
+The second parameter of the "wrapAxiosAdapter" function is the base URL, all mocked URLs will be based on it.
 
 ## Examples
 
@@ -433,13 +434,15 @@ Second parameter of wrapAxiosAdapter function is base url, all mocked url will b
 
 ```typescript
 import axios from 'axios'
-import { wrapAxiosAdapter, registerMock } from '@exness-tech/mock-xhr-request'
+import { wrapAxiosAdapter, registerMock, setDefaultOptions } from '@exness-tech/mock-xhr-request'
+
+setDefaultOptions({ baseUrl: '/api/v2'}); // only for shortening the URL path in the registerMock function
 
 const isProd = process.env.NODE_ENV !== 'production';
 const baseApiUrl = isProd ? 'http://localhost:8080/api/v2' : '/api/v2';
 const axiosInstance = axios.create({ withCredentials: true });
 
-wrapAxiosAdapter(axiosInstance, baseApiUrl);
+wrapAxiosAdapter(axiosInstance);
 
 const mockData = { userName: 'johnDoe123', age: 30 }
 registerMock('user/:id/info', 'get', 200, mockData);
@@ -452,14 +455,23 @@ const getUserInfo = (userId: number): Promise<UserInfo> => {
 api.getUserInfo(accountId).then(userInfo => renderUser(userInfo));
 
 // in browser console
-MockXHR.enable(); // call it once, no need to do it after page load/refresh
-MockXHR.get('/api/v2/user/:id/info').success(); // will be applied prepared mock
+MockXHR.enable(); // call it once, no need to do it after the page load/refresh
+MockXHR.get('/api/v2/user/:id/info').success(); // will be applied the prepared mock
 // Or set mock for specified user id
 MockXHR.get('/api/v2/user/345/info').success({
   userName: 'Some user name',
   age: 99
 });
-// Or return error 401 and add delay to check how site react to long requests
+// Or set mocks in order, the second request will return another response
+MockXHR.get('/api/v2/user/:id/info', 1).success({
+  userName: 'User name for the first request',
+  age: 50
+});
+MockXHR.get('/api/v2/user/:id/info', 2).success({
+  userName: 'Another response',
+  age: 99
+});
+// Or return error 401 and add delay to check how the site reacts to long requests
 MockXHR.get('/api/v2/user/345/info')
   .withDelay(2000)
   .withStatus(401, {
@@ -468,5 +480,5 @@ MockXHR.get('/api/v2/user/345/info')
   });
 ```
 
-Mocked url will be **http://localhost:8080/api/v2/user/:id/info**, in dev mode, and for prod version is **/api/v2/user/:id/info**.
-Mock system will return mocked results until disabling or unloading.
+Mocked URL will be **http://localhost:8080/api/v2/user/:id/info**, in dev mode, and for prod, the version is **/api/v2/user/:id/info**.
+The mock system will return mocked results until disabling or unloading.

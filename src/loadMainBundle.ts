@@ -82,13 +82,21 @@ function lazyRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): voi
 }
 
 export const lazyWrapAxiosAdapter: typeof wrapAxiosAdapter = (...args) => {
-  const originalAdapter = replaceOriginalAdapter(args[0]);
-  wrapAxiosCalls.push({args, originalAdapter});
+  try {
+    const originalAdapter = replaceOriginalAdapter(args[0]);
+    wrapAxiosCalls.push({args, originalAdapter});
+  } catch (e) {
+    console.error('Error occured while calling lazyWrapAxiosAdapter function', e);
+  }
 };
 
 export const lazyWrapChildAxiosAdapter: typeof wrapChildAxiosAdapter = (...args) => {
-  const originalAdapter = replaceOriginalAdapter(args[0]);
-  wrapChildAxiosCalls.push({args, originalAdapter});
+  try {
+    const originalAdapter = replaceOriginalAdapter(args[0]);
+    wrapChildAxiosCalls.push({args, originalAdapter});
+  } catch (e) {
+    console.error('Error occured while calling lazyWrapChildAxiosAdapter function', e);
+  }
 };
 
 // replace original adapter, through which all not mocked requests will go

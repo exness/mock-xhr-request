@@ -17,9 +17,9 @@ import {setWidgetName} from './widgetName';
 import {setGlobalMocksToWindow} from './registeredMocks';
 import {tryToAutoDisable} from './autoDisable';
 import {getDefaultOptions, setDefaultOptions} from './defaultOptions';
-import { MockXHRType } from './types'
+import {MockXHRType} from './types';
 
-export * from './exportedTypes'
+export * from './exportedTypes';
 
 const MockXHR: MockXHRType = {
   ...Mock,
@@ -37,30 +37,38 @@ const MockXHR: MockXHRType = {
 };
 
 const wrapAxiosAdapter = (axiosInstance: AxiosInstance): void => {
-  const {disableTimeMs, baseUrl} = getDefaultOptions();
+  try {
+    const {disableTimeMs, baseUrl} = getDefaultOptions();
 
-  if (disableTimeMs) {
-    tryToAutoDisable();
-  }
-  if (isEnabled()) {
-    const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
-    setRelativeBaseUrl(baseUrl);
-    setGlobalMocksToWindow();
-    registerAllMocks(adapter, baseUrl);
+    if (disableTimeMs) {
+      tryToAutoDisable();
+    }
+    if (isEnabled()) {
+      const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
+      setRelativeBaseUrl(baseUrl);
+      setGlobalMocksToWindow();
+      registerAllMocks(adapter, baseUrl);
+    }
+  } catch (e) {
+    console.error('Error happened while calling wrapAxiosAdapter function ', e);
   }
 
   window.MockXHR = MockXHR;
 };
 
 const wrapChildAxiosAdapter = (axiosInstance: AxiosInstance, widgetName: string): void => {
-  const {baseUrl} = getDefaultOptions();
+  try {
+    const {baseUrl} = getDefaultOptions();
 
-  if (isEnabled()) {
-    const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
-    setRelativeBaseUrl(baseUrl);
-    setWidgetName(widgetName);
-    setGlobalMocksToWindow();
-    registerAllMocks(adapter, baseUrl);
+    if (isEnabled()) {
+      const adapter = new MockAdapter(axiosInstance, {onNoMatch: 'passthrough'});
+      setRelativeBaseUrl(baseUrl);
+      setWidgetName(widgetName);
+      setGlobalMocksToWindow();
+      registerAllMocks(adapter, baseUrl);
+    }
+  } catch (e) {
+    console.error('Error happened while calling wrapChildAxiosAdapter function ', e);
   }
 };
 
