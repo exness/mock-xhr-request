@@ -1,6 +1,6 @@
 {
   "name": "@exness-tech/mock-xhr-request",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Mock axios requests from the browser console",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
   "sideEffects": false,
   "scripts": {
     "prepack": "yarn build",
-    "handle-lazy": "mkdir -p ./lazy && cp ./esm/*.d.ts ./lazy && mv ./esm/lazy.d.ts ./lazy/index.d.ts && rimraf ./lazy/lazy.d.ts" ,
+    "handle-lazy": "mkdir -p ./lazy && cp ./esm/*.d.ts ./lazy && mv ./esm/lazy.d.ts ./lazy/index.d.ts && rimraf ./lazy/lazy.d.ts",
     "build": "yarn clean && yarn build-js && yarn build-esm && yarn handle-lazy",
     "build-js": "yarn compile-js && yarn create-types-js && rimraf lib/**/__tests__",
     "build-esm": "yarn compile-esm && yarn create-types-esm && rimraf esm/**/__tests__",
