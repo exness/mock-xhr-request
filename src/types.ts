@@ -31,6 +31,7 @@ export type StoredData = {
   headers?: ResponseHeaders;
 };
 export type PreparedMock = {
+  lsKey: string
   method: HttpMethod;
   status: number;
   originalStatus: CodeStatus;
@@ -85,7 +86,7 @@ export type StatusBuilder = {
   error: (data?: ResponseData, headers?: ResponseHeaders) => void;
   success: (data?: ResponseData, headers?: ResponseHeaders) => void;
   withStatus: (status: number, data: ResponseData, headers?: ResponseHeaders) => void;
-  withDelay: (delay: number) => StatusBuilder;
+  withDelay: (delay?: number) => StatusBuilder;
 };
 
 type MockMethodBuilder = (url: UrlOrRegex, times?: Times) => StatusBuilder;

@@ -6,3 +6,4 @@ export const ALWAYS_TIME = 'always';
 export const PARAM_KEY = '__PARAM__';
 export const REQUIRED_SEARCH_KEY = '__REQUIRED_SEARCH__';
 export const OPTIONAL_SEARCH_KEY = '__OPTIONAL_SEARCH__';
+export const MAX_TIMEOUT_MS = 2147483647;

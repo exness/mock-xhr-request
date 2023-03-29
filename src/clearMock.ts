@@ -1,7 +1,7 @@
 import {normalizeUrl} from './normilizeUrl';
-import {MOCK_PREFIX} from './constants';
 import {UrlOrRegex} from './types';
-import {getLocalStorageKeyValue, getMockPairsFromLocalStorage} from './utils';
+import { getMockPairsFromLocalStorage} from './utils';
+import {getMocksFromStorage} from './getMocksFromStorage';
 
 const allowedMethods = ['get', 'post', 'patch', 'delete', 'put'];
 
@@ -11,16 +11,11 @@ const removeNMock = (nMock: number) => {
     return;
   }
 
-  let count = 1;
-  for (const [key, value] of getLocalStorageKeyValue()) {
-    if (!key.startsWith(MOCK_PREFIX) || !value) {
-      continue;
-    }
-    if (count === nMock) {
-      localStorage.removeItem(key);
-      return;
-    }
-    count += 1;
+  const itemToDelete = getMocksFromStorage()[nMock - 1];
+  if (itemToDelete) {
+    localStorage.removeItem(itemToDelete.lsKey);
+  } else {
+    console.error(`Mock with number ${nMock} not found`)
   }
 };
 

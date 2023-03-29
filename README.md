@@ -237,7 +237,7 @@ To mock request in browser console call one of the methods (get/post/patch/put/d
 1) success - that will set 200 code response.
 2) error - is equivalent to 424 status code.
 3) withStatus - here you can specify any number status code as first argument, second and other ones are the same as in success/error methods.
-4) withDelay - before calling success/error/withStatus methods you can call this one to set response delay in milliseconds.
+4) withDelay - before calling success/error/withStatus methods you can call this one to set response delay in milliseconds. Default value for delay is 2147483647 ms
 
 The second argument for http method function(get/post/...) is order number. You can set mocks in order. 
 The mock with last order number of mock without order will be used as default for specified URL path.
@@ -282,7 +282,7 @@ MockXHR
 
 MockXHR
   .get(urlOrRegex: string | RegExp, times: number | 'always')
-  .withDelay(time: number)
+  .withDelay(time?: number = 2147483647)
   .withStatus(status: number, data: object, headers?: object);
 ```
 

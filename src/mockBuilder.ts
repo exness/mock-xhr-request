@@ -1,6 +1,6 @@
 import {normalizeUrl} from './normilizeUrl';
 import {getCodeByStatus} from './registerMock';
-import {ALWAYS_TIME} from './constants';
+import { ALWAYS_TIME, MAX_TIMEOUT_MS } from './constants';
 import {
   CodeStatus,
   HttpMethod,
@@ -85,7 +85,7 @@ const methodBuilder =
       success: dataBuilder({statusCode: 'success', ...params}),
       withStatus: (status: number, data: ResponseData, headers?: ResponseHeaders) =>
         dataBuilder({statusCode: status, ...params})(data, headers),
-      withDelay: (delay: number) => methodBuilder(method, {delay})(url, times),
+      withDelay: (delay = MAX_TIMEOUT_MS) => methodBuilder(method, {delay})(url, times),
     };
   };
 
