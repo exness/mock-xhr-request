@@ -1,5 +1,5 @@
 import { PARAM_KEY } from '../constants';
-import { registerMock } from '../registerMock';
+import { internalRegisterMock, registerMock } from '../registerMock';
 import { __resetGlobalMocks, getAllRegisteredMocks } from '../registeredMocks';
 import { getRelativeBaseUrl } from '../baseUrl';
 
@@ -84,7 +84,7 @@ describe('registerMock', () => {
   });
 
   it('should add mock to globalMocks array if mock is function which returns promise', async () => {
-    registerMock(() =>
+    internalRegisterMock(() =>
       Promise.resolve({
         urlOrRegex: 'abc/qwe',
         method: 'get',
@@ -107,7 +107,7 @@ describe('registerMock', () => {
   });
 
   it('should add mock with headers to globalMocks array if mock is function which returns promise', async () => {
-    registerMock(() =>
+    internalRegisterMock(() =>
       Promise.resolve({
         urlOrRegex: 'abc/qwe',
         method: 'get',
@@ -132,7 +132,7 @@ describe('registerMock', () => {
   });
 
   it('should add mock with name to globalMocks array if mock is function which returns promise', async () => {
-    registerMock(() =>
+    internalRegisterMock(() =>
       Promise.resolve({
         urlOrRegex: 'abc/qwe',
         method: 'get',

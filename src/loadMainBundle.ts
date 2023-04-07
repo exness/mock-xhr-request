@@ -107,12 +107,12 @@ const replaceAdapterIfNeeded = (axiosInstance: AxiosInstance, adapter?: AxiosAda
 };
 
 export const loadMainBundle = async (): Promise<void> => {
-  const result = await import('./index');
+  const result = await import('./wrapAxiosAdapter');
   registerMockCalls.forEach(({args, enhanceCalls}) => {
     if (areArgsFromFunction(args)) {
-      result.registerMock(...args);
+      result.internalRegisterMock(...args);
     } else {
-      const withNameBuilder = result.registerMock(...args);
+      const withNameBuilder = result.internalRegisterMock(...args);
       enhanceCalls.reduce((acc, call) => call(acc), withNameBuilder);
     }
   });

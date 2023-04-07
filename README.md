@@ -174,6 +174,12 @@ registerMock(() => ({
 )
 
 // API
+type UrlOrRegex = string | RegExp
+type HttpMethod = 'get' | 'post' | 'patch' | 'delete' | 'put'
+type CodeStatus = number | 'success' | 'error'
+type ResponseData = unknown
+type ResponseHeaders = Record<string, string | number | boolean>
+
 registerMock({
     urlOrRegex: UrlOrRegex,
     method: HttpMethod,
@@ -189,6 +195,8 @@ If you have data, which is loaded in lazy mode, you can pass function, that retu
 
 ```typescript
 // Usage
+import { registerMock } from '@exness-tech/mock-xhr-request/lazy'
+
 registerMock(() => import('./userInfo/mock').then(m => m.userInfoMock)) // mock file contains variable userInfoMock with mock JSON value
 
 // API
