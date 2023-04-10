@@ -3,7 +3,6 @@
 [![Maintenance status][status-badge]][status-url]
 [![NPM version][npm-badge]][npm-url]
 [![Downloads per week][downloads-badge]][downloads-url]
-[![Code coverage][coverage-badge]][coverage-url]
 
 Mocking library, that allows mocking AJAX requests made with [axios](https://github.com/axios/axios) npm package 
 
@@ -496,3 +495,16 @@ MockXHR.get('/api/v2/user/345/info')
 
 Mocked URL will be **http://localhost:8080/api/v2/user/:id/info**, in dev mode, and for prod, the version is **/api/v2/user/:id/info**.
 The mock system will return mocked results until disabling or unloading.
+
+[status-url]: https://github.com/exness/mock-xhr-request/pulse
+[status-badge]: https://img.shields.io/github/last-commit/exness/mock-xhr-request.svg
+
+[license-url]: https://github.com/exness/mock-xhr-request/blob/master/LICENSE
+[license-badge]: https://img.shields.io/github/license/exness/mock-xhr-request.svg
+
+[npm-url]: https://www.npmjs.com/package/@exness-tech/mock-xhr-request
+[npm-badge]: https://img.shields.io/npm/v/@exness-tech/mock-xhr-request
+
+[downloads-url]: https://www.npmjs.com/package/@exness-tech/mock-xhr-request
+[downloads-badge]: https://img.shields.io/npm/dw/@exness-tech/mock-xhr-request
+
