@@ -1,6 +1,12 @@
 # @exness-tech/mock-xhr-request
+[![MIT license][license-badge]][license-url]
+[![Maintenance status][status-badge]][status-url]
+[![NPM version][npm-badge]][npm-url]
+[![Downloads per week][downloads-badge]][downloads-url]
+[![Code coverage][coverage-badge]][coverage-url]
 
 Mocking library, that allows mocking AJAX requests made with [axios](https://github.com/axios/axios) npm package 
+
 
 ### Features
 
