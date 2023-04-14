@@ -36,7 +36,7 @@ const applyParameters = ({method, headers, name, data, status, urlOrRegex}: Regi
   }
 };
 
-function registerMock(func: () => Promise<RegisterMockPayload> | RegisterMockPayload): void;
+function registerMock(func: () => RegisterMockPayload): void;
 function registerMock(
   urlOrRegex: UrlOrRegex,
   method: HttpMethod,
@@ -44,6 +44,21 @@ function registerMock(
   data: ResponseData
 ): WithHelpersBuilder;
 function registerMock(...args: RegisterMockArgs | RegisterFunctionArgs): void | WithHelpersBuilder {
+  if (areArgsFromFunction(args)) {
+    return internalRegisterMock(args[0])
+  } else {
+    return internalRegisterMock(...args)
+  }
+}
+
+function internalRegisterMock(func: () => Promise<RegisterMockPayload> | RegisterMockPayload): void;
+function internalRegisterMock(
+  urlOrRegex: UrlOrRegex,
+  method: HttpMethod,
+  status: CodeStatus,
+  data: ResponseData
+): WithHelpersBuilder;
+function internalRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): void | WithHelpersBuilder {
   if (areArgsFromFunction(args)) {
     const resultMock = args[0]();
     if (resultMock instanceof Promise) {
@@ -103,4 +118,4 @@ const registerStaticMock = (
   }
 };
 
-export {registerMock};
+export {registerMock, internalRegisterMock};

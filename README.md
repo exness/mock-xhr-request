@@ -1,6 +1,11 @@
 # @exness-tech/mock-xhr-request
+[![MIT license][license-badge]][license-url]
+[![Maintenance status][status-badge]][status-url]
+[![NPM version][npm-badge]][npm-url]
+[![Downloads per week][downloads-badge]][downloads-url]
 
 Mocking library, that allows mocking AJAX requests made with [axios](https://github.com/axios/axios) npm package 
+
 
 ### Features
 
@@ -174,6 +179,12 @@ registerMock(() => ({
 )
 
 // API
+type UrlOrRegex = string | RegExp
+type HttpMethod = 'get' | 'post' | 'patch' | 'delete' | 'put'
+type CodeStatus = number | 'success' | 'error'
+type ResponseData = unknown
+type ResponseHeaders = Record<string, string | number | boolean>
+
 registerMock({
     urlOrRegex: UrlOrRegex,
     method: HttpMethod,
@@ -189,6 +200,8 @@ If you have data, which is loaded in lazy mode, you can pass function, that retu
 
 ```typescript
 // Usage
+import { registerMock } from '@exness-tech/mock-xhr-request/lazy'
+
 registerMock(() => import('./userInfo/mock').then(m => m.userInfoMock)) // mock file contains variable userInfoMock with mock JSON value
 
 // API
@@ -482,3 +495,16 @@ MockXHR.get('/api/v2/user/345/info')
 
 Mocked URL will be **http://localhost:8080/api/v2/user/:id/info**, in dev mode, and for prod, the version is **/api/v2/user/:id/info**.
 The mock system will return mocked results until disabling or unloading.
+
+[status-url]: https://github.com/exness/mock-xhr-request/pulse
+[status-badge]: https://img.shields.io/github/last-commit/exness/mock-xhr-request.svg
+
+[license-url]: https://github.com/exness/mock-xhr-request/blob/master/LICENSE
+[license-badge]: https://img.shields.io/github/license/exness/mock-xhr-request.svg
+
+[npm-url]: https://www.npmjs.com/package/@exness-tech/mock-xhr-request
+[npm-badge]: https://img.shields.io/npm/v/@exness-tech/mock-xhr-request
+
+[downloads-url]: https://www.npmjs.com/package/@exness-tech/mock-xhr-request
+[downloads-badge]: https://img.shields.io/npm/dw/@exness-tech/mock-xhr-request
+
