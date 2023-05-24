@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/exness/mock-xhr-request/compare/v1.0.1...v1.0.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* **lazyWrapAxiosAdapter:** move window.MockXHR = lazyMockXHR to lazyWrapAxiosAdapter func body; ([053f107](https://github.com/exness/mock-xhr-request/commit/053f107bd33e48383dbb9c02e0ab5f7a49ace03e))
+
+
 ## [1.0.1](https://github.com/exness/mock-xhr-request/compare/v1.0.0...v1.0.1) (2023-04-14)
 
 
