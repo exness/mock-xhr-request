@@ -1,5 +1,5 @@
 import {AxiosAdapter, AxiosInstance} from 'axios';
-import {isEnabled} from './enable';
+import {enable, isEnabled} from './enable';
 import {WithHelpersBuilder, WithNameBuilder} from './registerMock';
 import {
   CodeStatus,
@@ -81,8 +81,27 @@ function lazyRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): voi
   };
 }
 
+export type LazyMockXHR = {
+  enable: typeof enable;
+};
+
+export const lazyMockXHR: LazyMockXHR = {
+  enable: async (): Promise<void> => {
+    enable();
+    try {
+      await loadMainBundle();
+    } catch (e) {
+      console.error('Bundle with mock system was not loaded');
+      throw e;
+    }
+  },
+};
+
 export const lazyWrapAxiosAdapter: typeof wrapAxiosAdapter = (...args) => {
   try {
+    if (!window.MockXHR) {
+      window.MockXHR = lazyMockXHR;
+    }
     const originalAdapter = replaceOriginalAdapter(args[0]);
     wrapAxiosCalls.push({args, originalAdapter});
   } catch (e) {
