@@ -31,7 +31,12 @@ function isArrayBuffer(val) {
 
 function combineUrls(baseURL, url) {
   if (baseURL) {
-    return baseURL.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '');
+    var finalBaseUrl = baseURL;
+    if (finalBaseUrl.startsWith('http')) {
+      finalBaseUrl = new URL(finalBaseUrl).pathname;
+    }
+
+    return finalBaseUrl.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '');
   }
 
   return url;
