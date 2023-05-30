@@ -14,6 +14,7 @@ import {
 import {wrapAxiosAdapter, wrapChildAxiosAdapter} from './index';
 import {storageHaveSomeMocks} from './storageHaveSomeMocks';
 import {areArgsFromFunction} from './lazyUtils';
+import * as wrapAxiosAdapterBundle from './wrapAxiosAdapter';
 
 type RegisterCall = {
   args: RegisterMockArgs | RegisterFunctionArgs;
@@ -28,6 +29,7 @@ const loadBundlePromise = new Promise<void>(res => {
   loadBundleResolveFunc = res;
 });
 let hasEnablingHappened = false;
+let wrapAxiosAdapterModule: typeof wrapAxiosAdapterBundle;
 
 // replace original adapter to make all requests wait for main bundle resolution
 // when main bundle will be loaded the adapter will be changed on mocked one before calling continuation of loadBundlePromise promise
@@ -55,6 +57,13 @@ function lazyRegisterMock(
   data: ResponseData
 ): WithHelpersBuilder;
 function lazyRegisterMock(...args: RegisterMockArgs | RegisterFunctionArgs): void | Promise<void> | WithHelpersBuilder {
+  if (wrapAxiosAdapterModule) {
+    if (areArgsFromFunction(args)) {
+      return wrapAxiosAdapterModule.internalRegisterMock(args[0]);
+    } else {
+      return wrapAxiosAdapterModule.internalRegisterMock(...args);
+    }
+  }
   const registerMockCall: RegisterCall = {args, enhanceCalls: []};
   registerMockCalls.push(registerMockCall);
 
@@ -102,6 +111,10 @@ export const lazyWrapAxiosAdapter: typeof wrapAxiosAdapter = (...args) => {
     if (!window.MockXHR) {
       window.MockXHR = lazyMockXHR;
     }
+    if (wrapAxiosAdapterModule) {
+      wrapAxiosAdapterModule.wrapAxiosAdapter(...args);
+      return;
+    }
     const originalAdapter = replaceOriginalAdapter(args[0]);
     wrapAxiosCalls.push({args, originalAdapter});
   } catch (e) {
@@ -111,6 +124,10 @@ export const lazyWrapAxiosAdapter: typeof wrapAxiosAdapter = (...args) => {
 
 export const lazyWrapChildAxiosAdapter: typeof wrapChildAxiosAdapter = (...args) => {
   try {
+    if (wrapAxiosAdapterModule) {
+      wrapAxiosAdapterModule.wrapChildAxiosAdapter(...args);
+      return;
+    }
     const originalAdapter = replaceOriginalAdapter(args[0]);
     wrapChildAxiosCalls.push({args, originalAdapter});
   } catch (e) {
@@ -126,22 +143,22 @@ const replaceAdapterIfNeeded = (axiosInstance: AxiosInstance, adapter?: AxiosAda
 };
 
 export const loadMainBundle = async (): Promise<void> => {
-  const result = await import('./wrapAxiosAdapter');
+  wrapAxiosAdapterModule = await import('./wrapAxiosAdapter');
   registerMockCalls.forEach(({args, enhanceCalls}) => {
     if (areArgsFromFunction(args)) {
-      result.internalRegisterMock(...args);
+      wrapAxiosAdapterModule.internalRegisterMock(...args);
     } else {
-      const withNameBuilder = result.internalRegisterMock(...args);
+      const withNameBuilder = wrapAxiosAdapterModule.internalRegisterMock(...args);
       enhanceCalls.reduce((acc, call) => call(acc), withNameBuilder);
     }
   });
   wrapAxiosCalls.forEach(c => {
     replaceAdapterIfNeeded(c.args[0], c.originalAdapter);
-    result.wrapAxiosAdapter(...c.args);
+    wrapAxiosAdapterModule.wrapAxiosAdapter(...c.args);
   });
   wrapChildAxiosCalls.forEach(c => {
     replaceAdapterIfNeeded(c.args[0], c.originalAdapter);
-    result.wrapChildAxiosAdapter(...c.args);
+    wrapAxiosAdapterModule.wrapChildAxiosAdapter(...c.args);
   });
   hasEnablingHappened = true;
   loadBundleResolveFunc();
