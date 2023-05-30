@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.5](https://github.com/exness/mock-xhr-request/compare/v1.0.3...v1.0.5) (2023-05-30)
+
+
+### Bug Fixes
+
+* **combineUrls:** remove host from base url when combining it with handler url; ([0918125](https://github.com/exness/mock-xhr-request/commit/091812583811e823be60493e4e60b6b6ae6d8c16))
+
+
 ## [1.0.3](https://github.com/exness/mock-xhr-request/compare/v1.0.2...v1.0.3) (2023-05-30)
 
 
