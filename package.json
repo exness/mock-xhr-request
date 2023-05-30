@@ -1,6 +1,6 @@
 {
   "name": "@exness-tech/mock-xhr-request",
-  "version": "1.0.3",
+  "version": "1.0.4-base-url-starts",
   "description": "Mock axios requests from the browser console",
   "repository": {
     "type": "git",
