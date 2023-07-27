@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.6](https://github.com/exness/mock-xhr-request/compare/v1.0.6...v1.0.7) (2023-07-27)
+## [1.0.6](https://github.com/exness/mock-xhr-request/compare/v1.0.5...v1.0.6) (2023-07-27)
 
 
 ### Bug Fixes
