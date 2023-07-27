@@ -14,7 +14,7 @@ const getBaseUrlForRelativeUrl = (baseUrl: string): string => {
 };
 
 // baseUrl could be relative or starts with http
-const getFullUrlToMock = (baseUrl: string, relativeUrl: string): string => {
+export const getFullUrlToMock = (baseUrl: string, relativeUrl: string): string => {
   if (relativeUrl.startsWith(baseUrl)) {
     return relativeUrl;
   }
@@ -32,8 +32,7 @@ const getFullUrlToMock = (baseUrl: string, relativeUrl: string): string => {
     return `${origin}${relativeUrl}`;
   }
 
-  const finalBaseUrl = getBaseUrlForRelativeUrl(baseUrl);
-  return finalBaseUrl + relativeUrl.slice(1);
+  return relativeUrl
 };
 
 const escapeRegExp = (str: string): string => {
