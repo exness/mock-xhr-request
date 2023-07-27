@@ -1,11 +1,11 @@
 # Changelog
 
-## [1.0.6](https://github.com/exness/mock-xhr-request/compare/v1.0.6...v1.0.7) (2023-05-30)
+## [1.0.6](https://github.com/exness/mock-xhr-request/compare/v1.0.6...v1.0.7) (2023-07-27)
 
 
 ### Bug Fixes
 
-* **getFullUrlToMock:** do not concat path of base url and relative if second one starts with /;
+* **getFullUrlToMock:** do not concat path of base url and relative if second one starts with /; ([00886e3](https://github.com/exness/mock-xhr-request/commit/00886e3f0b8bcc414a91b1441437ba3813ce45ec))
 
 
 ## [1.0.5](https://github.com/exness/mock-xhr-request/compare/v1.0.3...v1.0.5) (2023-05-30)
