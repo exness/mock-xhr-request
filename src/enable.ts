@@ -18,6 +18,10 @@ export const isEnabled = (): boolean => {
   if (isEnabledValue !== undefined) {
     return isEnabledValue;
   }
-  isEnabledValue = localStorage.getItem(ENABLE_MOCK_SYSTEM_KEY) !== null;
-  return isEnabledValue;
+  try {
+    isEnabledValue = localStorage.getItem(ENABLE_MOCK_SYSTEM_KEY) !== null;
+    return isEnabledValue;
+  } catch (e) {
+    return false;
+  }
 };
