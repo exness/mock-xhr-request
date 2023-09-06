@@ -22,6 +22,7 @@ export const isEnabled = (): boolean => {
     isEnabledValue = localStorage.getItem(ENABLE_MOCK_SYSTEM_KEY) !== null;
     return isEnabledValue;
   } catch (e) {
+    console.log('localStorage is inaccessible')
     return false;
   }
 };
