@@ -1,4 +1,11 @@
 # Changelog
+## [1.0.7](https://github.com/exness/mock-xhr-request/compare/v1.0.6...v1.0.7) (2023-09-06)
+
+
+### Bug Fixes
+
+* **isEnabled:** wrap in try/catch access to localStorage in isEnabled func. Fox incognito mode for iframe when localStorage is not available; ([1d46517](https://github.com/exness/mock-xhr-request/commit/1d465176a9f50690e1d20741d602e2d756550a08))
+
 
 ## [1.0.6](https://github.com/exness/mock-xhr-request/compare/v1.0.5...v1.0.6) (2023-07-27)
 
